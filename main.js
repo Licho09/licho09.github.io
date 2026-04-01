@@ -77,6 +77,7 @@ const TOTAL_STEPS = 3;
 let currentStep = 1;
 let onResultsScreen = false;
 let step1Saved = false;
+let step2Saved = false;
 
 // =====================
 // JOURNEY INDICATOR
@@ -209,13 +210,51 @@ function saveStep1() {
       name: name,
       phone: phone,
       situation: '',
+      experience: '',
       status: 'Step 1 Only'
   };
 
   const formData = new FormData();
   formData.append('data', JSON.stringify(payload));
+  
   fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
+      .then(response => response.json())
+      .then(result => {
+          console.log('Step 1 saved successfully:', result);
+      })
       .catch(err => console.error('Step 1 save failed:', err));
+}
+
+// =====================
+// PROGRESSIVE CAPTURE: Save after Step 2
+// =====================
+function saveStep2() {
+  if (step2Saved) return;
+
+  const situation = document.querySelector('input[name="situation"]:checked')?.value || '';
+  if (!situation) return;
+
+  leadData.situation = situation;
+  step2Saved = true;
+
+  const payload = {
+      type: 'partial',
+      name: leadData.name,
+      phone: leadData.phone,
+      situation: situation,
+      experience: '',
+      status: 'Step 2 Complete'
+  };
+
+  const formData = new FormData();
+  formData.append('data', JSON.stringify(payload));
+  
+  fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
+      .then(response => response.json())
+      .then(result => {
+          console.log('Step 2 saved successfully:', result);
+      })
+      .catch(err => console.error('Step 2 save failed:', err));
 }
 
 // =====================
@@ -250,6 +289,9 @@ function showBooking() {
       return;
   }
 
+  // Save Step 2 data before moving to Step 3
+  saveStep2();
+
   leadData.situation = situationInput.value;
   leadData.experience = experienceInput.value;
 
@@ -282,8 +324,13 @@ function showBooking() {
 
   const formData = new FormData();
   formData.append('data', JSON.stringify(payload));
+  
   fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
-      .catch(err => console.error('Survey save failed:', err));
+      .then(response => response.json())
+      .then(result => {
+          console.log('Complete lead saved successfully:', result);
+      })
+      .catch(err => console.error('Complete lead save failed:', err));
 }
 
 // =====================
