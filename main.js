@@ -60,17 +60,6 @@ function launchConfetti() {
 const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyQn65Ow5YEMMY4kNN2PNK5FzdysBV3igm5a69EAN-QeZgBgFJz2khkIhkrl3ljDYX6/exec';
 
 // =====================
-// IN-MEMORY LEAD DATA
-// (more reliable than localStorage for single-page flow)
-// =====================
-const leadData = {
-  name: '',
-  phone: '',
-  situation: '',
-  experience: ''
-};
-
-// =====================
 // FORM STATE
 // =====================
 const TOTAL_STEPS = 3;
@@ -110,9 +99,14 @@ function updateJourneyIndicator(step) {
 
 function updateProgress(step) {
   const pct = step === 'booking' ? 100 : ((step - 1) / TOTAL_STEPS) * 100;
-  document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('currentStep').textContent = step === 'booking' ? TOTAL_STEPS : step;
-  document.getElementById('totalSteps').textContent = TOTAL_STEPS;
+  const progressBar = document.getElementById('progressBar');
+  if (progressBar) progressBar.style.width = pct + '%';
+  
+  const currentStepSpan = document.getElementById('currentStep');
+  if (currentStepSpan) currentStepSpan.textContent = step === 'booking' ? TOTAL_STEPS : step;
+  
+  const totalStepsSpan = document.getElementById('totalSteps');
+  if (totalStepsSpan) totalStepsSpan.textContent = TOTAL_STEPS;
 }
 
 // =====================
@@ -201,9 +195,12 @@ function saveStep1() {
   const phone = document.getElementById('userPhone')?.value.trim() || '';
   if (!name || !phone) return;
 
-  leadData.name = name;
-  leadData.phone = phone;
   step1Saved = true;
+
+  // Save to localStorage for persistence across steps
+  try {
+    localStorage.setItem('leadData', JSON.stringify({ name, phone, situation: '', experience: '' }));
+  } catch (e) {}
 
   const payload = {
       type: 'partial',
@@ -218,10 +215,6 @@ function saveStep1() {
   formData.append('data', JSON.stringify(payload));
   
   fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
-      .then(response => response.json())
-      .then(result => {
-          console.log('Step 1 saved successfully:', result);
-      })
       .catch(err => console.error('Step 1 save failed:', err));
 }
 
@@ -234,13 +227,19 @@ function saveStep2() {
   const situation = document.querySelector('input[name="situation"]:checked')?.value || '';
   if (!situation) return;
 
-  leadData.situation = situation;
   step2Saved = true;
+
+  const leadData = JSON.parse(localStorage.getItem('leadData') || '{}');
+  leadData.situation = situation;
+  
+  try {
+    localStorage.setItem('leadData', JSON.stringify(leadData));
+  } catch (e) {}
 
   const payload = {
       type: 'partial',
-      name: leadData.name,
-      phone: leadData.phone,
+      name: leadData.name || '',
+      phone: leadData.phone || '',
       situation: situation,
       experience: '',
       status: 'Step 2 Complete'
@@ -250,10 +249,6 @@ function saveStep2() {
   formData.append('data', JSON.stringify(payload));
   
   fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
-      .then(response => response.json())
-      .then(result => {
-          console.log('Step 2 saved successfully:', result);
-      })
       .catch(err => console.error('Step 2 save failed:', err));
 }
 
@@ -264,12 +259,18 @@ function nextStep(from) {
   const name = document.getElementById('userName')?.value.trim();
   const phone = document.getElementById('userPhone')?.value.trim();
 
-  if (!name || !phone) {
-      alert('Please enter your name and phone number.');
-      return;
+  if (from === 1) {
+    if (!name || !phone) {
+        alert('Please enter your name and phone number.');
+        return;
+    }
+    saveStep1();
+  }
+  
+  if (from === 2) {
+    saveStep2();
   }
 
-  saveStep1();
   showStep(from + 1);
 }
 
@@ -280,20 +281,22 @@ function goBack(from) {
 function showBooking() {
   const situationInput = document.querySelector('input[name="situation"]:checked');
   const experienceInput = document.querySelector('input[name="experience"]:checked');
-  if (!situationInput) {
-      alert('Please select an option to continue.');
-      return;
-  }
-  if (!experienceInput) {
+  
+  if (!situationInput || !experienceInput) {
       alert('Please select an option to continue.');
       return;
   }
 
-  // Save Step 2 data before moving to Step 3
+  // Ensure Step 2 is saved if it hasn't been already
   saveStep2();
 
+  const leadData = JSON.parse(localStorage.getItem('leadData') || '{}');
   leadData.situation = situationInput.value;
   leadData.experience = experienceInput.value;
+
+  try {
+    localStorage.setItem('leadData', JSON.stringify(leadData));
+  } catch (e) {}
 
   showStep('booking');
   launchConfetti();
@@ -326,11 +329,7 @@ function showBooking() {
   formData.append('data', JSON.stringify(payload));
   
   fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
-      .then(response => response.json())
-      .then(result => {
-          console.log('Complete lead saved successfully:', result);
-      })
-      .catch(err => console.error('Complete lead save failed:', err));
+      .catch(err => console.error('Survey save failed:', err));
 }
 
 // =====================
@@ -344,7 +343,7 @@ document.addEventListener('input', function (e) {
   }
 });
 
-// Step 2 — enable button when radio selected
+// Step 2 & 3 — enable button when radio selected
 document.addEventListener('change', function (e) {
   if (e.target.name === 'situation') {
       setNextButtonState(2, true);
@@ -403,4 +402,6 @@ window.addEventListener('resize', updateMobileFooter);
 // =====================
 // INIT
 // =====================
-showStep(1);
+document.addEventListener('DOMContentLoaded', () => {
+    showStep(1);
+});
