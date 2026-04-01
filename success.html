@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Confirmed - 360° Builds</title>
+    <title>Booking Confirmed - Foam Flow Leads</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <!-- Google Analytics -->
@@ -16,11 +15,10 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-JKLEK6QQDY');
-        // Fire conversion event — this is your most valuable event
         gtag('event', 'call_booked', { event_category: 'Conversion', event_label: 'Strategy Call Booked' });
     </script>
 
-    <!-- Meta Pixel Code -->
+    <!-- Meta Pixel -->
     <script>
         !function (f, b, e, v, n, t, s) {
             if (f.fbq) return; n = f.fbq = function () {
@@ -45,27 +43,29 @@
 
 <body>
     <div class="app-container">
+
         <header class="simple-header">
             <div class="logo-text">
-                <a href="index.html">
-                    <span class="logo-number">360</span><span class="logo-degree">&deg;</span>
+                <a href="index.html" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:0.3rem;">
+                    <span class="logo-icon">🔥</span>
+                    <span class="logo-word">Foam</span>
+                    <span class="logo-accent">Flow</span>
                     <span class="logo-divider"></span>
-                    <span class="logo-word">Builds</span>
+                    <span class="logo-sub">Leads</span>
                 </a>
             </div>
         </header>
 
         <main class="question-container">
             <div class="form-wrapper" style="text-align: center;">
-                <div
-                    style="width: 64px; height: 64px; border-radius: 50%; background: var(--accent-bg); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--accent-bg); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)"
                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                 </div>
-                <h1 class="step-title">You're Booked!</h1>
-                <p class="step-subtitle">Your strategy call has been confirmed.</p>
+                <h1 class="step-title">You're Booked! 🎉</h1>
+                <p class="step-subtitle">Your free strategy call has been confirmed.</p>
 
                 <div class="selected-info" style="text-align: left; margin-top: 2rem;">
                     <p><strong>Name:</strong> <span id="confName">---</span></p>
@@ -81,20 +81,23 @@
         </main>
 
         <footer class="simple-footer">
-            <p>&copy; 2026 360&deg; Builds. All rights reserved.</p>
+            <p>&copy; 2026 Foam Flow Leads. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var lastBooking = JSON.parse(localStorage.getItem('lastBooking') || '{}');
-            if (lastBooking.name) {
-                document.getElementById('confName').textContent = lastBooking.name;
-                document.getElementById('confPhone').textContent = lastBooking.phone;
-                document.getElementById('confDateTime').textContent = lastBooking.dateTime;
-            }
+            // Read booking details from URL params (passed by booking.js)
+            const params = new URLSearchParams(window.location.search);
+            const name = params.get('name') || localStorage.getItem('lastBookingName') || '---';
+            const phone = params.get('phone') || localStorage.getItem('lastBookingPhone') || '---';
+            const dateTime = params.get('dateTime') || localStorage.getItem('lastBookingDateTime') || '---';
 
-            // Confetti Blast
+            document.getElementById('confName').textContent = name;
+            document.getElementById('confPhone').textContent = phone;
+            document.getElementById('confDateTime').textContent = dateTime;
+
+            // Confetti
             var count = 200;
             var defaults = { origin: { y: 0.7 } };
 
