@@ -12,10 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let selectedDate = null;
     let selectedTime = null;
-    let bookedSlots = []; // array of "Mon Apr 1 2026 at 9:00 AM" style strings
+    let bookedSlots = [];
 
     // ─── PRE-FILL FROM URL PARAMS ────────────────────────────
-    // main.js passes name + phone as URL params when redirecting
     const params = new URLSearchParams(window.location.search);
     const prefillName = params.get('name') || '';
     const prefillPhone = params.get('phone') || '';
@@ -36,13 +35,14 @@ document.addEventListener('DOMContentLoaded', function () {
     let stickyFooter = null;
     let mobileBackBtn = null;
     let mobileContinueBtn = null;
+    let mobileInitialized = false;
 
     function buildMobileFooter() {
         if (stickyFooter) return;
 
         stickyFooter = document.createElement('div');
         stickyFooter.className = 'mobile-booking-sticky';
-        stickyFooter.style.display = 'none';
+        stickyFooter.style.cssText = 'display:none; position:fixed; bottom:0; left:0; right:0; padding:12px 16px; background:var(--bg-card,#fff); border-top:1px solid var(--border,#eee); gap:10px; z-index:999;';
 
         mobileBackBtn = document.createElement('button');
         mobileBackBtn.className = 'btn btn-secondary';
@@ -73,14 +73,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function goToStep(step) {
         mobileStep = step;
-        document.body.classList.remove(
-            'mobile-booking-step-calendar',
-            'mobile-booking-step-time',
-            'mobile-booking-step-form'
-        );
-        document.body.classList.add('mobile-booking-step-' + step);
+
+        // Show/hide sections based on step — NO scroll reset
+        const calendarSide = document.querySelector('.booking-calendar-side');
+        const formSide = document.querySelector('.booking-form-side');
+        const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+
+        if (step === 'calendar') {
+            if (calendarSide) calendarSide.style.display = '';
+            if (timeSlotsContainer) timeSlotsContainer.style.display = 'none';
+            if (formSide) formSide.style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else if (step === 'time') {
+            if (calendarSide) calendarSide.style.display = '';
+            if (timeSlotsContainer) {
+                timeSlotsContainer.style.display = 'block';
+                // Scroll to time slots smoothly
+                setTimeout(() => {
+                    timeSlotsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+            if (formSide) formSide.style.display = 'none';
+        } else if (step === 'form') {
+            if (calendarSide) calendarSide.style.display = 'none';
+            if (formSide) {
+                formSide.style.display = '';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
         updateMobileFooter();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
 
         if (typeof gtag !== 'undefined') {
             if (step === 'time') gtag('event', 'booking_date_selected', { event_category: 'Booking', event_label: 'Date Selected' });
@@ -111,25 +133,29 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function initMobileFlow() {
-        if (!isMobile()) return;
+        if (!isMobile() || mobileInitialized) return;
+        mobileInitialized = true;
         buildMobileFooter();
-        document.body.classList.add('mobile-booking-flow');
-        goToStep('calendar');
+
+        // Add bottom padding so sticky footer doesn't cover content
+        document.body.style.paddingBottom = '80px';
+
+        // Initially hide form side and time slots on mobile
+        const formSide = document.querySelector('.booking-form-side');
+        const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+        if (formSide) formSide.style.display = 'none';
+        if (timeSlotsContainer) timeSlotsContainer.style.display = 'none';
+
+        stickyFooter.style.display = 'flex';
+        updateMobileFooter();
     }
 
     // ─── CALENDAR ────────────────────────────────────────────
     if (calendarGrid && currentMonthYear) {
         const now = new Date();
-        const currentYear = now.getFullYear();
-        const currentMonth = now.getMonth();
-        const months = ['January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December'];
-
-        // Figure out which month to show — the one where today+1 lands
         const todayMs = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
         const msPerDay = 86400000;
 
-        // tomorrow's date
         const tomorrow = new Date(todayMs + msPerDay);
         const displayYear = tomorrow.getFullYear();
         const displayMonth = tomorrow.getMonth();
@@ -163,11 +189,18 @@ document.addEventListener('DOMContentLoaded', function () {
                         document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
                         dayEl.classList.add('selected');
                         selectedDate = new Date(displayYear, displayMonth, day);
+                        selectedTime = null; // reset time when date changes
                         updateDisplay();
                         generateTimeSlots();
-                        const tsContainer = document.getElementById('timeSlotsContainer');
-                        if (tsContainer && !isMobile()) tsContainer.style.display = 'block';
-                        if (isMobile()) updateMobileFooter();
+
+                        if (isMobile()) {
+                            updateMobileFooter();
+                            // On mobile, auto-advance to time step after picking date
+                            setTimeout(() => goToStep('time'), 200);
+                        } else {
+                            const tsContainer = document.getElementById('timeSlotsContainer');
+                            if (tsContainer) tsContainer.style.display = 'block';
+                        }
                     });
                 }
 
@@ -180,7 +213,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ─── TIME SLOTS ──────────────────────────────────────────
     function slotKey(date, time) {
-        // Canonical key: "2026-04-01|9:00 AM"
         const y = date.getFullYear();
         const m = String(date.getMonth() + 1).padStart(2, '0');
         const d = String(date.getDate()).padStart(2, '0');
@@ -216,7 +248,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ─── FETCH BOOKED SLOTS ──────────────────────────────────
-    // Calls the Google Sheet with ?action=getBookings to retrieve taken slots
     function fetchBookedSlots() {
         return fetch(GOOGLE_SHEET_URL + '?action=getBookings')
             .then(res => res.json())
@@ -226,7 +257,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
             .catch(() => {
-                // If fetch fails, proceed with no blocks — don't break the page
                 bookedSlots = [];
             });
     }
@@ -289,7 +319,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 phone,
                 dateTime: selectedDateTimeText,
                 situation: prefillSituation,
-                experience: prefillExperience
+                experience: prefillExperience,
+                status: 'Booked'
             };
 
             if (typeof gtag !== 'undefined') {
@@ -302,14 +333,19 @@ document.addEventListener('DOMContentLoaded', function () {
             const formData = new FormData();
             formData.append('data', JSON.stringify(finalData));
 
-            // Optimistically mark this slot as booked locally before redirect
             if (selectedDate && selectedTime) {
                 bookedSlots.push(slotKey(selectedDate, selectedTime));
             }
 
             fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
                 .then(() => {
-                    window.location.href = 'success.html';
+                    // Pass booking details to success page via URL params
+                    const successParams = new URLSearchParams({
+                        name: name,
+                        phone: phone,
+                        dateTime: selectedDateTimeText
+                    });
+                    window.location.href = 'success.html?' + successParams.toString();
                 })
                 .catch(error => {
                     alert('There was an error submitting. Please try again.');
@@ -327,25 +363,20 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('resize', () => {
         if (!isMobile()) {
             if (stickyFooter) stickyFooter.style.display = 'none';
-            document.body.classList.remove(
-                'mobile-booking-flow',
-                'mobile-booking-step-calendar',
-                'mobile-booking-step-time',
-                'mobile-booking-step-form'
-            );
-        } else {
-            initMobileFlow();
+            document.body.style.paddingBottom = '';
+            // Show everything on desktop
+            const formSide = document.querySelector('.booking-form-side');
+            const calendarSide = document.querySelector('.booking-calendar-side');
+            const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+            if (formSide) formSide.style.display = '';
+            if (calendarSide) calendarSide.style.display = '';
+            if (timeSlotsContainer) timeSlotsContainer.style.display = '';
         }
     });
 
     // ─── INIT ─────────────────────────────────────────────────
     updateDisplay();
-    // Fetch booked slots from Google Sheet, then init calendar
     fetchBookedSlots().finally(() => {
-        if (calendarGrid && currentMonthYear) {
-            // initCalendar is defined inside the calendarGrid block above
-            // so we just need to re-trigger mobile flow after data loads
-        }
         initMobileFlow();
     });
 });
