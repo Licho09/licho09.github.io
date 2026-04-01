@@ -57,6 +57,7 @@ function launchConfetti() {
 // =====================
 // GOOGLE SHEET URL
 // =====================
+// ⚠️ IMPORTANT: Replace this URL with your actual Google Apps Script Web App URL
 const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyQn65Ow5YEMMY4kNN2PNK5FzdysBV3igm5a69EAN-QeZgBgFJz2khkIhkrl3ljDYX6/exec';
 
 // =====================
@@ -65,8 +66,38 @@ const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyQn65Ow5YEMMY
 const TOTAL_STEPS = 3;
 let currentStep = 1;
 let onResultsScreen = false;
-let step1Saved = false;
-let step2Saved = false;
+
+// =====================
+// PROGRESSIVE CAPTURE LOGIC
+// =====================
+function saveProgress(stepStatus ) {
+    const name = document.getElementById('userName')?.value.trim() || localStorage.getItem('leadName') || '';
+    const phone = document.getElementById('userPhone')?.value.trim() || localStorage.getItem('leadPhone') || '';
+    
+    // Save to memory so we don't lose it on next steps
+    if (name) localStorage.setItem('leadName', name);
+    if (phone) localStorage.setItem('leadPhone', phone);
+
+    const situation = document.querySelector('input[name="situation"]:checked')?.value || '';
+    const experience = document.querySelector('input[name="experience"]:checked')?.value || '';
+
+    const payload = {
+        type: stepStatus === 'Complete' ? 'survey' : 'partial',
+        name: name,
+        phone: phone,
+        situation: situation,
+        experience: experience,
+        status: stepStatus
+    };
+
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(payload));
+    
+    fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
+        .then(res => res.json())
+        .then(data => console.log('Saved:', stepStatus, data))
+        .catch(err => console.error('Save failed:', err));
+}
 
 // =====================
 // JOURNEY INDICATOR
@@ -186,92 +217,24 @@ function showStep(n) {
 }
 
 // =====================
-// PROGRESSIVE CAPTURE: Save after Step 1
-// =====================
-function saveStep1() {
-  if (step1Saved) return;
-
-  const name = document.getElementById('userName')?.value.trim() || '';
-  const phone = document.getElementById('userPhone')?.value.trim() || '';
-  if (!name || !phone) return;
-
-  step1Saved = true;
-
-  // Save to localStorage for persistence across steps
-  try {
-    localStorage.setItem('leadData', JSON.stringify({ name, phone, situation: '', experience: '' }));
-  } catch (e) {}
-
-  const payload = {
-      type: 'partial',
-      name: name,
-      phone: phone,
-      situation: '',
-      experience: '',
-      status: 'Step 1 Only'
-  };
-
-  const formData = new FormData();
-  formData.append('data', JSON.stringify(payload));
-  
-  fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
-      .catch(err => console.error('Step 1 save failed:', err));
-}
-
-// =====================
-// PROGRESSIVE CAPTURE: Save after Step 2
-// =====================
-function saveStep2() {
-  if (step2Saved) return;
-
-  const situation = document.querySelector('input[name="situation"]:checked')?.value || '';
-  if (!situation) return;
-
-  step2Saved = true;
-
-  const leadData = JSON.parse(localStorage.getItem('leadData') || '{}');
-  leadData.situation = situation;
-  
-  try {
-    localStorage.setItem('leadData', JSON.stringify(leadData));
-  } catch (e) {}
-
-  const payload = {
-      type: 'partial',
-      name: leadData.name || '',
-      phone: leadData.phone || '',
-      situation: situation,
-      experience: '',
-      status: 'Step 2 Complete'
-  };
-
-  const formData = new FormData();
-  formData.append('data', JSON.stringify(payload));
-  
-  fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
-      .catch(err => console.error('Step 2 save failed:', err));
-}
-
-// =====================
 // NAVIGATION
 // =====================
 function nextStep(from) {
-  const name = document.getElementById('userName')?.value.trim();
-  const phone = document.getElementById('userPhone')?.value.trim();
-
-  if (from === 1) {
-    if (!name || !phone) {
-        alert('Please enter your name and phone number.');
-        return;
+    if (from === 1) {
+        const name = document.getElementById('userName')?.value.trim();
+        const phone = document.getElementById('userPhone')?.value.trim();
+        if (!name || !phone) {
+            alert('Please enter your name and phone number.');
+            return;
+        }
+        saveProgress('Step 1 Only'); // Capture Step 1
     }
-    saveStep1();
-  }
-  
-  if (from === 2) {
-    saveStep2();
-  }
+    
+    if (from === 2) {
+        saveProgress('Step 2 Complete'); // Capture Step 2
+    }
 
-  showStep(from + 1);
+    showStep(from + 1);
 }
 
 function goBack(from) {
@@ -279,57 +242,34 @@ function goBack(from) {
 }
 
 function showBooking() {
-  const situationInput = document.querySelector('input[name="situation"]:checked');
-  const experienceInput = document.querySelector('input[name="experience"]:checked');
-  
-  if (!situationInput || !experienceInput) {
-      alert('Please select an option to continue.');
-      return;
-  }
+    const situation = document.querySelector('input[name="situation"]:checked');
+    const experience = document.querySelector('input[name="experience"]:checked');
+    
+    if (!situation || !experience) {
+        alert('Please select an option to continue.');
+        return;
+    }
 
-  // Ensure Step 2 is saved if it hasn't been already
-  saveStep2();
+    saveProgress('Complete'); // Capture Final Step
+    
+    showStep('booking');
+    launchConfetti();
 
-  const leadData = JSON.parse(localStorage.getItem('leadData') || '{}');
-  leadData.situation = situationInput.value;
-  leadData.experience = experienceInput.value;
+    if (typeof fbq !== 'undefined') fbq('track', 'Lead');
 
-  try {
-    localStorage.setItem('leadData', JSON.stringify(leadData));
-  } catch (e) {}
-
-  showStep('booking');
-  launchConfetti();
-
-  if (typeof fbq !== 'undefined') fbq('track', 'Lead');
-
-  // Wire up the booking button to pass lead data via URL params
-  const bookingBtn = document.querySelector('#stepBooking .btn-booking-gold');
-  if (bookingBtn) {
-      const params = new URLSearchParams({
-          name: leadData.name,
-          phone: leadData.phone,
-          situation: leadData.situation,
-          experience: leadData.experience
-      });
-      bookingBtn.onclick = () => { window.location.href = `booking.html?${params.toString()}`; };
-  }
-
-  // Send complete lead to Google Sheet
-  const payload = {
-      type: 'survey',
-      name: leadData.name,
-      phone: leadData.phone,
-      situation: leadData.situation,
-      experience: leadData.experience,
-      status: 'Complete'
-  };
-
-  const formData = new FormData();
-  formData.append('data', JSON.stringify(payload));
-  
-  fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
-      .catch(err => console.error('Survey save failed:', err));
+    // Wire up the booking button to pass lead data via URL params
+    const bookingBtn = document.querySelector('#stepBooking .btn-booking-gold');
+    if (bookingBtn) {
+        const name = localStorage.getItem('leadName');
+        const phone = localStorage.getItem('leadPhone');
+        const params = new URLSearchParams({
+            name: name,
+            phone: phone,
+            situation: situation.value,
+            experience: experience.value
+        });
+        bookingBtn.onclick = () => { window.location.href = `booking.html?${params.toString()}`; };
+    }
 }
 
 // =====================
