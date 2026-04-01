@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed - 360° Builds</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JKLEK6QQDY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JKLEK6QQDY');
+        // Fire conversion event — this is your most valuable event
+        gtag('event', 'call_booked', { event_category: 'Conversion', event_label: 'Strategy Call Booked' });
+    </script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '854197977632425');
+        fbq('track', 'PageView');
+        fbq('track', 'Schedule');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=854197977632425&ev=PageView&noscript=1" />
+    </noscript>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="simple-header">
+            <div class="logo-text">
+                <a href="index.html">
+                    <span class="logo-number">360</span><span class="logo-degree">&deg;</span>
+                    <span class="logo-divider"></span>
+                    <span class="logo-word">Builds</span>
+                </a>
+            </div>
+        </header>
+
+        <main class="question-container">
+            <div class="form-wrapper" style="text-align: center;">
+                <div
+                    style="width: 64px; height: 64px; border-radius: 50%; background: var(--accent-bg); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <h1 class="step-title">You're Booked!</h1>
+                <p class="step-subtitle">Your strategy call has been confirmed.</p>
+
+                <div class="selected-info" style="text-align: left; margin-top: 2rem;">
+                    <p><strong>Name:</strong> <span id="confName">---</span></p>
+                    <p><strong>Phone:</strong> <span id="confPhone">---</span></p>
+                    <p><strong>Appointment:</strong> <span id="confDateTime">---</span></p>
+                </div>
+
+                <p style="margin-top: 2rem; color: var(--text-muted);">We'll reach out shortly to confirm and prepare for your call. Talk soon!</p>
+
+                <a href="index.html" class="btn btn-primary btn-block"
+                    style="margin-top: 2rem; text-decoration: none;">Return Home</a>
+            </div>
+        </main>
+
+        <footer class="simple-footer">
+            <p>&copy; 2026 360&deg; Builds. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var lastBooking = JSON.parse(localStorage.getItem('lastBooking') || '{}');
+            if (lastBooking.name) {
+                document.getElementById('confName').textContent = lastBooking.name;
+                document.getElementById('confPhone').textContent = lastBooking.phone;
+                document.getElementById('confDateTime').textContent = lastBooking.dateTime;
+            }
+
+            // Confetti Blast
+            var count = 200;
+            var defaults = { origin: { y: 0.7 } };
+
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio)
+                }));
+            }
+
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
+        });
+    </script>
+</body>
+
+</html>
