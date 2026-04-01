@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Call - Foam Flow Leads</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JKLEK6QQDY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JKLEK6QQDY');
+    </script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '854197977632425');
+        fbq('track', 'PageView');
+        fbq('track', 'Lead');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=854197977632425&ev=PageView&noscript=1" />
+    </noscript>
+</head>
+
+<body>
+    <div class="app-container">
+
+        <header class="simple-header">
+            <div class="logo-text">
+                <a href="index.html" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:0.3rem;">
+                    <span class="logo-icon">🔥</span>
+                    <span class="logo-word">Foam</span>
+                    <span class="logo-accent">Flow</span>
+                    <span class="logo-divider"></span>
+                    <span class="logo-sub">Leads</span>
+                </a>
+            </div>
+        </header>
+
+        <section class="hero-text">
+            <p class="hero-eyebrow">One Last Step</p>
+            <h1 class="hero-headline">Book Your Free<br>Strategy Call</h1>
+            <p class="hero-subtext">A short 30-min Zoom call to map out how we get you consistent spray foam jobs.</p>
+        </section>
+
+        <!-- Journey Step Indicator — step 3 active -->
+        <div class="journey-steps">
+            <div class="journey-step done">
+                <div class="journey-num"><span>1</span></div>
+                <span class="journey-label">Your Info</span>
+            </div>
+            <div class="journey-arrow">→</div>
+            <div class="journey-step done">
+                <div class="journey-num"><span>2</span></div>
+                <span class="journey-label">Quick Question</span>
+            </div>
+            <div class="journey-arrow">→</div>
+            <div class="journey-step active">
+                <div class="journey-num"><span>3</span></div>
+                <span class="journey-label">Book Your Call</span>
+            </div>
+        </div>
+
+        <main class="booking-container">
+            <div class="booking-split-wrapper">
+
+                <!-- Left: Form -->
+                <div class="booking-form-side">
+                    <h2 class="step-title">Your Details</h2>
+                    <p class="step-subtitle">Confirm your info to lock in your spot. No contracts, no pressure &mdash; just a free 30-min call.</p>
+                    <form id="bookingForm">
+                        <div class="form-group">
+                            <label for="userName" class="field-label">Full Name</label>
+                            <input type="text" id="userName" name="userName" placeholder="Your Name" required class="text-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="userPhone" class="field-label">Phone Number</label>
+                            <input type="tel" id="userPhone" name="userPhone" placeholder="(555) 000-0000" required class="text-input">
+                        </div>
+                        <div class="selected-info" id="selectedInfo">
+                            <p><strong>Selected:</strong> <span id="displayDateTime">Please select a date and time</span></p>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block btn-disabled" disabled>Confirm My Free Call</button>
+                        <a href="index.html" class="back-link">← Back to questions</a>
+                    </form>
+                </div>
+
+                <!-- Right: Calendar -->
+                <div class="booking-calendar-side">
+                    <div class="calendar-section-title">Pick a Date</div>
+                    <div class="calendar-header">
+                        <h2 id="currentMonthYear"></h2>
+                    </div>
+                    <div class="calendar-widget">
+                        <div class="calendar-days-header">
+                            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid"></div>
+                    </div>
+                    <div class="time-slots-container" id="timeSlotsContainer">
+                        <h3 class="field-label">Available Times</h3>
+                        <div class="time-grid" id="timeGrid">
+                            <p class="empty-msg">Select a date to see times</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <footer class="simple-footer">
+            <p>&copy; 2026 Foam Flow Leads. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="booking.js"></script>
+</body>
+
+</html>
