@@ -222,6 +222,14 @@ body {
     padding: 1rem;
 }
 
+.form-pre-header {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
 .form-wrapper {
     background-color: var(--card-bg);
     width: 100%;
