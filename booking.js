@@ -36,13 +36,14 @@ document.addEventListener('DOMContentLoaded', function () {
     let mobileBackBtn = null;
     let mobileContinueBtn = null;
     let mobileInitialized = false;
+    let scrollRestoreTimeout = null;
 
     function buildMobileFooter() {
         if (stickyFooter) return;
 
         stickyFooter = document.createElement('div');
         stickyFooter.className = 'mobile-booking-sticky';
-        stickyFooter.style.cssText = 'display:none; position:fixed; bottom:0; left:0; right:0; padding:12px 16px; background:var(--bg-card,#fff); border-top:1px solid var(--border,#eee); gap:10px; z-index:999;';
+        stickyFooter.style.cssText = 'display:none; position:fixed; bottom:0; left:0; right:0; padding:12px 16px; background:var(--bg-card,#fff); border-top:1px solid var(--border,#eee); gap:10px; z-index:999; will-change:transform;';
 
         mobileBackBtn = document.createElement('button');
         mobileBackBtn.className = 'btn btn-secondary';
@@ -83,22 +84,27 @@ document.addEventListener('DOMContentLoaded', function () {
             if (calendarSide) calendarSide.style.display = '';
             if (timeSlotsContainer) timeSlotsContainer.style.display = 'none';
             if (formSide) formSide.style.display = 'none';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Use requestAnimationFrame to avoid layout thrashing
+            requestAnimationFrame(() => {
+                window.scrollTo({ top: 0, behavior: 'auto' });
+            });
         } else if (step === 'time') {
             if (calendarSide) calendarSide.style.display = '';
             if (timeSlotsContainer) {
                 timeSlotsContainer.style.display = 'block';
-                // Scroll to time slots smoothly
-                setTimeout(() => {
-                    timeSlotsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
+                // Defer scroll to avoid jank
+                requestAnimationFrame(() => {
+                    timeSlotsContainer.scrollIntoView({ behavior: 'auto', block: 'start' });
+                });
             }
             if (formSide) formSide.style.display = 'none';
         } else if (step === 'form') {
             if (calendarSide) calendarSide.style.display = 'none';
             if (formSide) {
                 formSide.style.display = '';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                requestAnimationFrame(() => {
+                    window.scrollTo({ top: 0, behavior: 'auto' });
+                });
             }
         }
 
@@ -167,12 +173,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const firstDay = new Date(displayYear, displayMonth, 1).getDay();
             const daysInMonth = new Date(displayYear, displayMonth + 1, 0).getDate();
-            calendarGrid.innerHTML = '';
+            
+            // Use DocumentFragment to batch DOM updates
+            const fragment = document.createDocumentFragment();
 
             for (let i = 0; i < firstDay; i++) {
                 const empty = document.createElement('div');
                 empty.className = 'calendar-day';
-                calendarGrid.appendChild(empty);
+                fragment.appendChild(empty);
             }
 
             for (let day = 1; day <= daysInMonth; day++) {
@@ -185,26 +193,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (diffDays >= 1 && diffDays <= 3) {
                     dayEl.classList.add('available');
-                    dayEl.addEventListener('click', () => {
-                        document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
-                        dayEl.classList.add('selected');
-                        selectedDate = new Date(displayYear, displayMonth, day);
-                        selectedTime = null; // reset time when date changes
-                        updateDisplay();
-                        generateTimeSlots();
-
-                        if (isMobile()) {
-                            updateMobileFooter();
-                            // On mobile, auto-advance to time step after picking date
-                            setTimeout(() => goToStep('time'), 200);
-                        } else {
-                            const tsContainer = document.getElementById('timeSlotsContainer');
-                            if (tsContainer) tsContainer.style.display = 'block';
-                        }
-                    });
+                    // Use event delegation to reduce event listeners
+                    dayEl.dataset.day = day;
+                    dayEl.addEventListener('click', handleDateClick);
                 }
 
-                calendarGrid.appendChild(dayEl);
+                fragment.appendChild(dayEl);
+            }
+
+            calendarGrid.innerHTML = '';
+            calendarGrid.appendChild(fragment);
+        }
+
+        function handleDateClick(e) {
+            const dayEl = e.currentTarget;
+            const day = parseInt(dayEl.dataset.day);
+            
+            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+            dayEl.classList.add('selected');
+            selectedDate = new Date(displayYear, displayMonth, day);
+            selectedTime = null; // reset time when date changes
+            updateDisplay();
+            generateTimeSlots();
+
+            if (isMobile()) {
+                updateMobileFooter();
+                // On mobile, auto-advance to time step after picking date
+                requestAnimationFrame(() => {
+                    goToStep('time');
+                });
+            } else {
+                const tsContainer = document.getElementById('timeSlotsContainer');
+                if (tsContainer) tsContainer.style.display = 'block';
             }
         }
 
@@ -221,12 +241,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function generateTimeSlots() {
         if (!timeGrid) return;
-        timeGrid.innerHTML = '';
+        
+        // Use DocumentFragment for batch DOM updates
+        const fragment = document.createDocumentFragment();
         const times = ['9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
+        
         times.forEach(time => {
             const timeBtn = document.createElement('div');
             timeBtn.className = 'time-btn';
             timeBtn.textContent = time;
+            timeBtn.dataset.time = time;
 
             const isBooked = selectedDate && bookedSlots.includes(slotKey(selectedDate, time));
 
@@ -234,17 +258,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 timeBtn.classList.add('time-btn-booked');
                 timeBtn.title = 'Already booked';
             } else {
-                timeBtn.addEventListener('click', () => {
-                    document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
-                    timeBtn.classList.add('active');
-                    selectedTime = time;
-                    updateDisplay();
-                    if (isMobile()) updateMobileFooter();
-                });
+                timeBtn.addEventListener('click', handleTimeClick);
             }
 
-            timeGrid.appendChild(timeBtn);
+            fragment.appendChild(timeBtn);
         });
+
+        timeGrid.innerHTML = '';
+        timeGrid.appendChild(fragment);
+    }
+
+    function handleTimeClick(e) {
+        const timeBtn = e.currentTarget;
+        const time = timeBtn.dataset.time;
+        
+        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+        timeBtn.classList.add('active');
+        selectedTime = time;
+        updateDisplay();
+        if (isMobile()) updateMobileFooter();
     }
 
     // ─── FETCH BOOKED SLOTS ──────────────────────────────────
@@ -360,19 +392,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ─── RESIZE ──────────────────────────────────────────────
+    let resizeTimeout;
     window.addEventListener('resize', () => {
-        if (!isMobile()) {
-            if (stickyFooter) stickyFooter.style.display = 'none';
-            document.body.style.paddingBottom = '';
-            // Show everything on desktop
-            const formSide = document.querySelector('.booking-form-side');
-            const calendarSide = document.querySelector('.booking-calendar-side');
-            const timeSlotsContainer = document.getElementById('timeSlotsContainer');
-            if (formSide) formSide.style.display = '';
-            if (calendarSide) calendarSide.style.display = '';
-            if (timeSlotsContainer) timeSlotsContainer.style.display = '';
-        }
-    });
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (!isMobile()) {
+                if (stickyFooter) stickyFooter.style.display = 'none';
+                document.body.style.paddingBottom = '';
+                // Show everything on desktop
+                const formSide = document.querySelector('.booking-form-side');
+                const calendarSide = document.querySelector('.booking-calendar-side');
+                const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+                if (formSide) formSide.style.display = '';
+                if (calendarSide) calendarSide.style.display = '';
+                if (timeSlotsContainer) timeSlotsContainer.style.display = '';
+            }
+        }, 150);
+    }, { passive: true });
 
     // ─── INIT ─────────────────────────────────────────────────
     updateDisplay();
