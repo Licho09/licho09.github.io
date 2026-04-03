@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foam Flow Leads - Get More Spray Foam Jobs in Texas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="description" content="Texas spray foam contractors: get consistent job requests without relying on referrals or slow weeks. See if you qualify.">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JKLEK6QQDY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JKLEK6QQDY');
+    </script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1525517045371976');
+    fbq('track', 'PageView');
+    
+    // Track which landing page variant they came from
+    fbq('track', 'ViewContent', {
+        content_name: 'Landing Page - Pain Point',
+        content_type: 'landing_page_variant'
+    });
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=1525517045371976&ev=PageView&noscript=1"/></noscript>
+    <!-- End Meta Pixel Code -->
+</head>
+
+<body>
+    <div class="app-container">
+
+        <!-- HEADER -->
+        <header class="simple-header">
+            <div class="logo-text">FOAM FLOW LEADS</div>
+        </header>
+
+        <!-- HERO — PAIN POINT VERSION (Direct/Urgent) -->
+        <section class="hero-text">
+            <h1 class="hero-headline">
+                Stop Dealing With Slow Weeks and
+                <span class="headline-highlight">Inconsistent Job Flow</span>
+            </h1>
+            <p class="hero-subtext">
+                Get a steady pipeline of spray foam leads every month. No more wondering where your next job is coming from. No more feast-or-famine cycles.
+            </p>
+        </section>
+
+        <!-- HERO CTA -->
+        <div class="hero-cta-wrap">
+            <button class="btn-hero-cta" onclick="document.getElementById('formSection').scrollIntoView({behavior:'smooth'})">
+                See If You Qualify →
+            </button>
+            <p class="hero-cta-sub">👇 Takes 60 seconds — see if your area is still open</p>
+        </div>
+
+        <!-- FORM SECTION -->
+        <section id="formSection" class="form-section">
+
+            <div class="form-wrapper" id="formWrapper">
+
+                <div class="progress-container">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <p class="progress-text">
+                        Step <span id="currentStep">1</span> of <span id="totalSteps">3</span>
+                    </p>
+                </div>
+
+                <form id="applicationForm">
+
+                    <!-- Step 1: Contact Info -->
+                    <div class="form-step active" id="step1">
+                        <h2 class="step-title">First, let's get your contact info.</h2>
+                        <p class="step-subtitle">No spam, ever.</p>
+
+                        <div class="form-group">
+                            <label for="userName" class="field-label">Full Name</label>
+                            <input type="text" id="userName" name="userName" placeholder="Your Name" required class="text-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="userPhone" class="field-label">Phone Number</label>
+                            <input type="tel" id="userPhone" name="userPhone" placeholder="(555) 000-0000" required class="text-input">
+                        </div>
+
+                        <button type="button" class="btn btn-primary btn-block btn-disabled" disabled onclick="nextStep(1)">Next →</button>
+                    </div>
+
+                    <!-- Step 2: Current Situation -->
+                    <div class="form-step" id="step2">
+                        <h2 class="step-title">What best describes your current situation?</h2>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="situation" value="need-more-jobs">
+                                <span class="radio-label">We have work but need more consistent jobs</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="situation" value="want-to-scale">
+                                <span class="radio-label">We are busy but want to scale</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="situation" value="inconsistent">
+                                <span class="radio-label">We are inconsistent / have slow weeks</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="situation" value="just-starting">
+                                <span class="radio-label">We are just starting / growing</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="situation" value="exploring">
+                                <span class="radio-label">Just exploring options</span>
+                            </label>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-secondary" onclick="goBack(2)">Back</button>
+                            <button type="button" class="btn btn-primary btn-disabled" disabled onclick="nextStep(2)">Next →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Experience -->
+                    <div class="form-step" id="step3">
+                        <h2 class="step-title">How long have you been in the spray foam business?</h2>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="experience" value="less-than-1-year">
+                                <span class="radio-label">Less than 1 year</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="experience" value="1-2-years">
+                                <span class="radio-label">1–2 years</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="experience" value="3-5-years">
+                                <span class="radio-label">3–5 years</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="experience" value="5-plus-years">
+                                <span class="radio-label">5+ years</span>
+                            </label>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-secondary" onclick="goBack(3)">Back</button>
+                            <button type="button" class="btn btn-primary btn-disabled" disabled onclick="showBooking()">See My Results →</button>
+                        </div>
+                    </div>
+
+                    <!-- Results Step -->
+                    <div class="form-step" id="stepBooking">
+                        <div class="booking-result">
+                            <div class="booking-result-badge">✅ You Qualify</div>
+                            <h2 class="booking-result-title">Here's What Happens Next.</h2>
+                            <p class="booking-result-sub">On this free call, we'll build a custom lead plan for your spray foam business and show you exactly how to get a consistent flow of job requests in your area.</p>
+                            <div class="booking-bullets">
+                                <div class="booking-bullet-item">📞 We'll map out your local market and identify where the jobs are hiding</div>
+                                <div class="booking-bullet-item">📲 See exactly how homeowners and contractors will find and contact you</div>
+                                <div class="booking-bullet-item">🎯 Get a clear gameplan to fill your schedule without chasing referrals</div>
+                            </div>
+                            <button type="button" class="btn btn-booking-gold btn-block" onclick="window.location.href='booking.html?utm_campaign=pain_point'">
+                                Book My Free Strategy Call →
+                            </button>
+                            <p class="booking-trust-line">No sales pressure · 30-min Zoom call · Texas contractors only</p>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+        <!-- Confetti Canvas -->
+        <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+        <!-- VALUE SECTION -->
+        <section class="value-section">
+            <div class="value-inner">
+                <div class="section-label">Why Foam Flow Leads Works</div>
+                <div class="value-cards">
+                    <div class="value-card">
+                        <span class="value-card-icon">📞</span>
+                        <div class="value-card-title">Inbound Calls, Not Cold Outreach</div>
+                        <p class="value-card-text">We run targeted ads that bring homeowners and GCs to you. No cold calling, no chasing leads — your phone rings with people who already want spray foam.</p>
+                    </div>
+                    <div class="value-card">
+                        <span class="value-card-icon">📍</span>
+                        <div class="value-card-title">Hyper-Local Targeting</div>
+                        <p class="value-card-text">We target your exact service area in Texas so you're not wasting money on leads two hours away. Every dollar works harder in your backyard.</p>
+                    </div>
+                    <div class="value-card">
+                        <span class="value-card-icon">🔄</span>
+                        <div class="value-card-title">Stop the Feast-or-Famine Cycle</div>
+                        <p class="value-card-text">Referrals dry up. Slow weeks kill cash flow. Our system keeps a steady pipeline of job requests coming in month after month.</p>
+                    </div>
+                    <div class="value-card">
+                        <span class="value-card-icon">📈</span>
+                        <div class="value-card-title">Built for Spray Foam Contractors</div>
+                        <p class="value-card-text">Generic marketing agencies don't understand spray foam. We do. Our messaging and strategy is built specifically for this trade in Texas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="simple-footer">
+            <p>© 2026 Foam Flow Leads. All rights reserved.</p>
+        </footer>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
