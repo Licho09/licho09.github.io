@@ -21,8 +21,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const prefillSituation = params.get('situation') || '';
     const prefillExperience = params.get('experience') || '';
 
-    if (userNameInput && prefillName) userNameInput.value = prefillName;
-    if (userPhoneInput && prefillPhone) userPhoneInput.value = prefillPhone;
+    // Pre-fill the form fields with data from index.html
+    if (userNameInput && prefillName) {
+        userNameInput.value = prefillName;
+    }
+    if (userPhoneInput && prefillPhone) {
+        userPhoneInput.value = prefillPhone;
+    }
 
     // ─── GA4 ─────────────────────────────────────────────────
     if (typeof gtag !== 'undefined') {
@@ -36,14 +41,13 @@ document.addEventListener('DOMContentLoaded', function () {
     let mobileBackBtn = null;
     let mobileContinueBtn = null;
     let mobileInitialized = false;
-    let scrollRestoreTimeout = null;
 
     function buildMobileFooter() {
         if (stickyFooter) return;
 
         stickyFooter = document.createElement('div');
         stickyFooter.className = 'mobile-booking-sticky';
-        stickyFooter.style.cssText = 'display:none; position:fixed; bottom:0; left:0; right:0; padding:12px 16px; background:var(--bg-card,#fff); border-top:1px solid var(--border,#eee); gap:10px; z-index:999; will-change:transform;';
+        stickyFooter.style.cssText = 'display:none; position:fixed; bottom:0; left:0; right:0; padding:12px 16px; background:var(--bg-card,#fff); border-top:1px solid var(--border,#eee); gap:10px; z-index:999; will-change:transform; transform:translateZ(0);';
 
         mobileBackBtn = document.createElement('button');
         mobileBackBtn.className = 'btn btn-secondary';
@@ -75,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function goToStep(step) {
         mobileStep = step;
 
-        // Show/hide sections based on step — NO scroll reset
+        // Show/hide sections based on step
         const calendarSide = document.querySelector('.booking-calendar-side');
         const formSide = document.querySelector('.booking-form-side');
         const timeSlotsContainer = document.getElementById('timeSlotsContainer');
