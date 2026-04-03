@@ -1,17 +1,20 @@
 /* ===========================
-   FOAM FLOW LEADS - CLEAN LIGHT THEME
+   FOAM FLOW LEADS — MINIMAL CLEAN
    =========================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
 :root {
-    --bg-color: #f8fafc;
+    --bg: #ffffff;
+    --text: #111111;
+    --text-muted: #666666;
+    --primary: #0062fe;
+    --highlight: #FFE566;
+    --highlight-dark: #f5d800;
+    --border: #e8e8e8;
     --card-bg: #ffffff;
-    --primary-color: #0062fe;
-    --primary-hover: #0050d4;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --border-color: #e2e8f0;
-    --accent-bg: #f0f5ff;
-    --progress-bg: #f1f5f9;
+    --accent-bg: #f5f8ff;
+    --progress-bg: #f0f0f0;
 }
 
 * {
@@ -21,11 +24,12 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-main);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
     line-height: 1.5;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
 }
 
 .app-container {
@@ -38,51 +42,16 @@ body {
    HEADER
    =========================== */
 .simple-header {
-    padding: 2rem 1rem 1.5rem;
+    padding: 2rem 1.5rem 1rem;
     text-align: center;
 }
 
 .logo-text {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: 1.1rem;
-    font-weight: 700;
-}
-
-.logo-icon {
-    font-size: 1.4rem;
-    line-height: 1;
-}
-
-.logo-word {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--text-main);
-    letter-spacing: -0.5px;
-}
-
-.logo-accent {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--primary-color);
-    letter-spacing: -0.5px;
-}
-
-.logo-divider {
-    width: 1.5px;
-    height: 1.4rem;
-    background-color: var(--border-color);
-    margin: 0 0.45rem;
-    flex-shrink: 0;
-}
-
-.logo-sub {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.18em;
+    color: var(--text);
+    display: inline-block;
 }
 
 /* ===========================
@@ -90,216 +59,130 @@ body {
    =========================== */
 .hero-text {
     text-align: center;
-    padding: 8px 24px 28px;
-}
-
-.hero-eyebrow {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--primary-color);
-    margin-bottom: 10px;
+    padding: 1.5rem 24px 1.5rem;
+    max-width: 700px;
+    margin: 0 auto;
 }
 
 .hero-headline {
-    font-size: clamp(28px, 5vw, 42px);
-    font-weight: 800;
-    line-height: 1.15;
-    color: var(--text-main);
-    letter-spacing: -0.02em;
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--text);
+    letter-spacing: -0.03em;
+    margin-bottom: 1.25rem;
 }
 
 .headline-highlight {
-    color: var(--primary-color);
-    position: relative;
-    display: inline-block;
+    background-color: var(--highlight);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline;
+    line-height: 1.3;
 }
 
 .hero-subtext {
-    font-size: 15px;
+    font-size: 17px;
     color: var(--text-muted);
-    margin-top: 10px;
-}
-
-/* ===========================
-   JOURNEY STEPS
-   =========================== */
-.journey-steps {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 16px 24px;
+    line-height: 1.65;
     max-width: 560px;
     margin: 0 auto;
-    gap: 0;
 }
 
-.journey-step {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 7px 12px;
-    border-radius: 100px;
-    border: 1.5px solid transparent;
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0.35;
-    cursor: default;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.journey-step.active {
-    opacity: 1;
-    background: var(--accent-bg);
-    border-color: rgba(0, 98, 254, 0.25);
-    box-shadow: 0 2px 10px rgba(0, 98, 254, 0.1);
-}
-
-.journey-step.done {
-    opacity: 0.65;
-}
-
-.journey-step.done .journey-num {
-    background: #22c55e;
-    color: white;
-}
-
-.journey-step.done .journey-num::after {
-    content: '✓';
-    font-size: 10px;
-    font-weight: 800;
-}
-
-.journey-step.done .journey-num span {
-    display: none;
-}
-
-.journey-num {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--border-color);
-    color: var(--text-muted);
-    font-size: 11px;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.3s ease;
-}
-
-.journey-step.active .journey-num {
-    background: var(--primary-color);
-    color: white;
-    box-shadow: 0 0 0 3px rgba(0, 98, 254, 0.18);
-}
-
-.journey-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-main);
-    transition: color 0.3s ease;
-    line-height: 1;
-}
-
-.journey-step.active .journey-label {
-    color: var(--primary-color);
-}
-
-.journey-arrow {
-    color: var(--border-color);
-    font-size: 13px;
-    flex-shrink: 0;
-    margin: 0 1px;
-    line-height: 1;
+.hero-subtext strong {
+    color: var(--text);
+    font-weight: 700;
 }
 
 /* ===========================
-   FORM AREA
+   HERO CTA
    =========================== */
-.question-container {
-    flex: 1;
+.hero-cta-wrap {
+    text-align: center;
+    padding: 2rem 1.5rem 0;
+}
+
+.btn-hero-cta {
+    display: inline-block;
+    background: var(--highlight);
+    color: var(--text);
+    font-size: 1.15rem;
+    font-weight: 800;
+    padding: 1.1rem 2.5rem;
+    border-radius: 6px;
+    border: 2.5px solid var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.01em;
+    box-shadow: 4px 4px 0px var(--text);
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-hero-cta:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--text);
+}
+
+.btn-hero-cta:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px var(--text);
+}
+
+.hero-cta-sub {
+    margin-top: 0.85rem;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* ===========================
+   FORM SECTION
+   =========================== */
+.form-section {
+    padding: 3rem 1rem 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    padding: 1rem;
 }
 
-.form-pre-header {
-    text-align: center;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--primary-color);
-    background: var(--accent-bg);
-    border: 1px solid rgba(0, 98, 254, 0.25);
-    padding: 10px 20px;
-    border-radius: 100px;
-    margin-bottom: 14px;
-    display: inline-block;
-    width: fit-content;
-    align-self: center;
-}
-
+/* ===========================
+   FORM WRAPPER
+   =========================== */
 .form-wrapper {
     background-color: var(--card-bg);
     width: 100%;
     max-width: 550px;
     padding: 2.5rem;
-    border-radius: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.08);
+    border: 1.5px solid var(--border);
     overflow: hidden;
-}
-
-.form-qualify-header {
-    text-align: center;
-    padding: 20px 24px 16px;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--accent-bg);
-    border-radius: 16px 16px 0 0;
-    margin: -2.5rem -2.5rem 1.5rem -2.5rem;
-}
-
-.form-qualify-title {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--text-main);
-    margin-bottom: 4px;
-}
-
-.form-qualify-sub {
-    font-size: 13px;
-    color: var(--text-muted);
 }
 
 /* ===========================
    PROGRESS BAR
    =========================== */
 .progress-container {
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
 }
 
 .progress-bar-bg {
     background-color: var(--progress-bg);
-    height: 8px;
-    border-radius: 4px;
+    height: 6px;
+    border-radius: 3px;
     overflow: hidden;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem;
 }
 
 .progress-bar {
     height: 100%;
-    background-color: var(--primary-color);
+    background-color: var(--highlight-dark);
     width: 0%;
     transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .progress-text {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
     font-weight: 500;
     text-align: center;
@@ -314,32 +197,26 @@ body {
 
 .form-step.active {
     display: block;
-    animation: fadeIn 0.4s ease-out;
+    animation: fadeUp 0.35s ease-out;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .step-title {
-    font-size: 1.4rem;
+    font-size: 1.35rem;
     font-weight: 800;
-    color: var(--text-main);
-    margin-bottom: 1rem;
+    color: var(--text);
+    margin-bottom: 0.6rem;
     line-height: 1.3;
 }
 
 .step-subtitle {
     color: var(--text-muted);
     margin-bottom: 1.5rem;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 /* ===========================
@@ -348,38 +225,38 @@ body {
 .radio-group {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 9px;
     margin-bottom: 1.5rem;
 }
 
 .radio-card {
     display: flex;
     align-items: center;
-    padding: 1rem 1.25rem;
-    border: 2px solid var(--border-color);
-    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    border: 2px solid var(--border);
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.18s ease;
     background-color: var(--card-bg);
 }
 
 .radio-card:hover {
-    border-color: var(--primary-color);
-    background-color: var(--accent-bg);
+    border-color: var(--highlight-dark);
+    background-color: #fffef0;
 }
 
 .radio-card input[type="radio"] {
     width: 18px;
     height: 18px;
     margin-right: 14px;
-    accent-color: var(--primary-color);
+    accent-color: var(--text);
     flex-shrink: 0;
 }
 
 .radio-label {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    color: var(--text-main);
+    color: var(--text);
 }
 
 /* ===========================
@@ -387,38 +264,42 @@ body {
    =========================== */
 .btn {
     padding: 0.9rem 1.75rem;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.18s ease;
     border: none;
     display: inline-block;
     text-align: center;
+    font-family: 'Inter', sans-serif;
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
-    color: white;
+    background-color: var(--highlight);
+    color: var(--text);
+    border: 2px solid var(--text);
+    box-shadow: 3px 3px 0 var(--text);
 }
 
 .btn-primary:hover {
-    background-color: var(--primary-hover);
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--text);
 }
 
 .btn-primary:active {
-    transform: scale(0.98);
-    background-color: var(--primary-hover);
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--text);
 }
 
 .btn-secondary {
     background-color: white;
     color: var(--text-muted);
-    border: 2px solid var(--border-color);
+    border: 2px solid var(--border);
 }
 
 .btn-secondary:hover {
-    border-color: var(--text-muted);
+    border-color: #aaa;
 }
 
 .btn-block {
@@ -427,15 +308,11 @@ body {
 
 .btn-primary:disabled,
 .btn-primary.btn-disabled {
-    background-color: var(--border-color);
-    color: var(--text-muted);
+    background-color: var(--progress-bg);
+    color: #aaa;
     cursor: not-allowed;
-    opacity: 0.7;
-}
-
-.btn-primary:disabled:hover,
-.btn-primary.btn-disabled:hover {
-    background-color: var(--border-color);
+    border-color: var(--border);
+    box-shadow: none;
     transform: none;
 }
 
@@ -449,7 +326,7 @@ body {
 }
 
 /* ===========================
-   FORM INPUTS
+   INPUTS
    =========================== */
 .form-group {
     margin-bottom: 0;
@@ -458,26 +335,35 @@ body {
 .field-label {
     display: block;
     font-weight: 700;
-    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+    color: var(--text);
 }
 
 .text-input {
     width: 100%;
-    padding: 1rem;
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
-    margin-bottom: 1.5rem;
+    padding: 0.9rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 1.25rem;
     font-size: 1rem;
-    transition: border-color 0.2s ease;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.18s ease;
+    color: var(--text);
+    background: white;
 }
 
 .text-input:focus {
     outline: none;
-    border-color: var(--primary-color);
+    border-color: var(--text);
+}
+
+.text-input::placeholder {
+    color: #bbb;
 }
 
 /* ===========================
-   BOOKING RESULT SCREEN
+   BOOKING RESULT
    =========================== */
 .booking-result {
     text-align: center;
@@ -499,7 +385,7 @@ body {
 .booking-result-title {
     font-size: 1.4rem;
     font-weight: 800;
-    color: var(--text-main);
+    color: var(--text);
     margin-bottom: 10px;
     line-height: 1.25;
 }
@@ -514,46 +400,47 @@ body {
 .booking-bullets {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin: 20px 0 28px;
+    gap: 10px;
+    margin: 20px 0 24px;
     text-align: left;
 }
 
 .booking-bullet-item {
     font-size: 14px;
     font-weight: 600;
-    color: var(--text-main);
+    color: var(--text);
     line-height: 1.5;
     padding: 12px 14px;
-    background: var(--accent-bg);
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
+    background: #fafafa;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
 }
 
 .btn-booking-gold {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: white;
+    background: var(--highlight);
+    color: var(--text);
     font-size: 1.05rem;
     padding: 1rem 1.75rem;
-    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
-    border: none;
+    border: 2.5px solid var(--text);
+    box-shadow: 4px 4px 0 var(--text);
     width: 100%;
-    border-radius: 10px;
-    font-weight: 700;
+    border-radius: 8px;
+    font-weight: 800;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.18s ease;
     display: block;
     text-align: center;
+    font-family: 'Inter', sans-serif;
 }
 
 .btn-booking-gold:hover {
-    background: linear-gradient(135deg, #d97706, #b45309);
-    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
-    transform: translateY(-1px);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--text);
 }
 
 .btn-booking-gold:active {
-    transform: scale(0.98);
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0 var(--text);
 }
 
 .booking-trust-line {
@@ -567,8 +454,9 @@ body {
    VALUE SECTION
    =========================== */
 .value-section {
-    padding: 48px 24px 64px;
-    background: var(--bg-color);
+    padding: 56px 24px 64px;
+    background: #fafafa;
+    border-top: 1px solid var(--border);
 }
 
 .value-inner {
@@ -579,9 +467,9 @@ body {
 .section-label {
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--primary-color);
+    color: var(--text-muted);
     margin-bottom: 24px;
     display: flex;
     align-items: center;
@@ -592,7 +480,7 @@ body {
     content: '';
     flex: 1;
     height: 1px;
-    background: var(--border-color);
+    background: var(--border);
 }
 
 .value-cards {
@@ -602,41 +490,70 @@ body {
 }
 
 .value-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-top: 3px solid var(--primary-color);
-    border-radius: 12px;
-    padding: 22px 20px;
+    background: white;
+    border: 1.5px solid var(--border);
+    border-top: 3px solid var(--highlight-dark);
+    border-radius: 10px;
+    padding: 20px 18px;
     transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .value-card:hover {
-    box-shadow: 0 4px 16px rgba(0, 98, 254, 0.08);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
     transform: translateY(-2px);
 }
 
 .value-card-icon {
-    font-size: 24px;
+    font-size: 22px;
     display: block;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .value-card-title {
     font-weight: 700;
-    font-size: 15px;
-    color: var(--text-main);
-    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 6px;
     line-height: 1.3;
 }
 
 .value-card-text {
     font-size: 13px;
     color: var(--text-muted);
-    line-height: 1.65;
+    line-height: 1.6;
 }
 
 /* ===========================
-   BOOKING PAGE LAYOUT
+   CONFETTI
+   =========================== */
+.confetti-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 999;
+}
+
+/* ===========================
+   FOOTER
+   =========================== */
+.simple-footer {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+}
+
+/* ===========================
+   MOBILE STICKY - DISABLED
+   =========================== */
+.mobile-sticky-footer {
+    display: none !important;
+}
+
+/* ===========================
+   BOOKING PAGE
    =========================== */
 .booking-container {
     flex: 1;
@@ -653,47 +570,36 @@ body {
     width: 100%;
     background: white;
     padding: 2.5rem;
-    border-radius: 20px;
-    box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 24px -4px rgba(0,0,0,0.1);
+    border: 1.5px solid var(--border);
     align-items: start;
 }
 
 .booking-form-side {
-    border-right: 1px solid var(--border-color);
+    border-right: 1px solid var(--border);
     padding-right: 2rem;
 }
 
-.booking-calendar-side {
-    min-width: 0;
-}
+.booking-calendar-side { min-width: 0; }
 
 .selected-info {
     background: var(--accent-bg);
     padding: 0.85rem 1rem;
     border-radius: 8px;
     margin-bottom: 1.25rem;
-    border-left: 4px solid var(--primary-color);
+    border-left: 4px solid var(--primary);
     font-size: 0.9rem;
 }
 
-/* ===========================
-   CALENDAR
-   =========================== */
-.calendar-header {
-    margin-bottom: 1rem;
-}
-
+.calendar-header { margin-bottom: 1rem; }
 .calendar-header h2 {
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--text-main);
+    color: var(--text);
 }
 
-.calendar-widget {
-    width: 100%;
-    overflow: hidden;
-}
+.calendar-widget { width: 100%; overflow: hidden; }
 
 .calendar-days-header {
     display: grid;
@@ -717,43 +623,35 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 600;
     font-size: 0.88rem;
-    color: #cbd5e1;
+    color: #ccc;
     cursor: not-allowed;
     border: 1px solid transparent;
     min-width: 0;
 }
 
 .calendar-day.available {
-    color: var(--text-main);
+    color: var(--text);
     cursor: pointer;
-    border-color: var(--border-color);
+    border-color: var(--border);
     transition: all 0.15s ease;
 }
 
 .calendar-day.available:hover {
-    background-color: var(--accent-bg);
-    border-color: var(--primary-color);
+    background-color: var(--highlight);
+    border-color: var(--highlight-dark);
 }
 
 .calendar-day.selected {
-    background-color: var(--primary-color);
+    background-color: var(--text);
     color: white;
-    border-color: var(--primary-color);
+    border-color: var(--text);
 }
 
-/* ===========================
-   TIME SLOTS
-   =========================== */
-.time-slots-container {
-    margin-top: 1.5rem;
-}
-
-.time-slots-container .field-label {
-    margin-bottom: 0.75rem;
-}
+.time-slots-container { margin-top: 1.5rem; }
+.time-slots-container .field-label { margin-bottom: 0.75rem; }
 
 .time-grid {
     display: grid;
@@ -763,26 +661,27 @@ body {
 
 .time-btn {
     padding: 0.7rem 0.5rem;
-    border: 1.5px solid var(--border-color);
-    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
     background: white;
     cursor: pointer;
     text-align: center;
     font-weight: 600;
     font-size: 0.875rem;
-    color: var(--text-main);
+    color: var(--text);
     transition: all 0.15s ease;
+    font-family: 'Inter', sans-serif;
 }
 
 .time-btn:hover {
-    background-color: var(--accent-bg);
-    border-color: var(--primary-color);
+    background-color: var(--highlight);
+    border-color: var(--highlight-dark);
 }
 
 .time-btn.active {
-    background-color: var(--primary-color);
+    background-color: var(--text);
     color: white;
-    border-color: var(--primary-color);
+    border-color: var(--text);
 }
 
 .empty-msg {
@@ -803,31 +702,24 @@ body {
     transition: color 0.2s;
 }
 
-.back-link:hover {
-    color: var(--primary-color);
-}
+.back-link:hover { color: var(--text); }
 
 .calendar-section-title {
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--text-main);
+    color: var(--text);
     margin-bottom: 1rem;
     display: none;
 }
 
-/* ===========================
-   MOBILE BOOKING STICKY
-   =========================== */
 .mobile-booking-sticky {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--card-bg);
+    bottom: 0; left: 0; right: 0;
+    background: white;
     padding: 0.85rem 1.25rem;
     padding-bottom: max(1.5rem, calc(0.85rem + env(safe-area-inset-bottom, 0px)));
-    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
-    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+    border-top: 1px solid var(--border);
     z-index: 100;
     display: none;
     gap: 10px;
@@ -842,10 +734,9 @@ body {
         padding: 2rem;
         gap: 0;
     }
-
     .booking-form-side {
         border-right: none;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border);
         padding-right: 0;
         padding-bottom: 2rem;
         margin-bottom: 2rem;
@@ -853,91 +744,33 @@ body {
 }
 
 /* ===========================
-   MOBILE BOOKING FLOW
+   MOBILE BOOKING
    =========================== */
 @media (max-width: 768px) {
     .booking-container {
         padding: 0 0.75rem calc(140px + env(safe-area-inset-bottom, 0px));
     }
-
-    .booking-split-wrapper {
-        padding: 1.25rem;
-        border-radius: 14px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    }
-
-    .calendar-section-title {
-        display: block;
-    }
-
-    .time-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-    }
-
-    .time-btn {
-        padding: 0.85rem 0.5rem;
-        font-size: 0.9rem;
-        min-height: 46px;
-        border-radius: 10px;
-    }
+    .booking-split-wrapper { padding: 1.25rem; border-radius: 12px; }
+    .calendar-section-title { display: block; }
+    .time-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .time-btn { padding: 0.85rem 0.5rem; font-size: 0.9rem; min-height: 46px; border-radius: 8px; }
 
     body.mobile-booking-flow .booking-form-side { display: none; }
-
     body.mobile-booking-step-calendar .booking-form-side { display: none; }
     body.mobile-booking-step-calendar .time-slots-container { display: none !important; }
     body.mobile-booking-step-calendar .booking-calendar-side { display: block; }
-    body.mobile-booking-step-calendar .calendar-header { display: block; }
-    body.mobile-booking-step-calendar .calendar-widget { display: block; }
-
     body.mobile-booking-step-time .booking-form-side { display: none; }
     body.mobile-booking-step-time .booking-calendar-side { display: block; }
     body.mobile-booking-step-time .calendar-widget { display: none !important; }
     body.mobile-booking-step-time .calendar-header { display: none !important; }
     body.mobile-booking-step-time .time-slots-container { display: block !important; }
-
     body.mobile-booking-step-form .booking-calendar-side { display: none !important; }
-    body.mobile-booking-step-form .booking-form-side {
-        display: block !important;
-        border-bottom: none;
-        padding-bottom: 0;
-    }
+    body.mobile-booking-step-form .booking-form-side { display: block !important; border-bottom: none; padding-bottom: 0; }
     body.mobile-booking-step-form .booking-form-side .btn-block { display: block !important; }
     body.mobile-booking-step-form .back-link { display: block !important; }
-
     body.mobile-booking-flow .back-link { display: none; }
     body.mobile-booking-flow .booking-form-side .btn-block { display: none; }
-
     .mobile-booking-sticky { display: none; }
-}
-
-/* ===========================
-   CONFETTI
-   =========================== */
-.confetti-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 999;
-}
-
-/* ===========================
-   FOOTER
-   =========================== */
-.simple-footer {
-    padding: 2rem;
-    text-align: center;
-    color: var(--text-muted);
-}
-
-/* ===========================
-   MOBILE STICKY FOOTER - DISABLED
-   =========================== */
-.mobile-sticky-footer {
-    display: none !important;
 }
 
 /* ===========================
@@ -951,103 +784,49 @@ body {
     }
 
     .simple-header {
-        padding: 1.25rem 1rem 0.5rem;
+        padding: 1.5rem 1rem 0.5rem;
     }
 
-    .logo-word,
-    .logo-accent {
-        font-size: 1.25rem;
+    .logo-text {
+        font-size: 1.3rem;
     }
 
-    .logo-sub {
-        font-size: 0.85rem;
-    }
-
-    /* Bigger gap between logo and eyebrow on mobile */
     .hero-text {
-        padding: 20px 20px 24px;
-    }
-
-    .hero-eyebrow {
-        font-size: 11px;
-        background: var(--accent-bg);
-        border: 1px solid rgba(0, 98, 254, 0.25);
-        padding: 6px 14px;
-        border-radius: 100px;
-        margin-bottom: 12px;
+        padding: 1.5rem 20px 1rem;
     }
 
     .hero-headline {
-        font-size: 26px;
-        line-height: 1.2;
+        font-size: 30px;
+        line-height: 1.15;
     }
 
     .hero-subtext {
-        font-size: 14px;
+        font-size: 15px;
     }
 
-    /* Journey — show only active label */
-    .journey-steps {
-        padding: 0 8px 20px;
-        gap: 4px;
+    .hero-cta-wrap {
+        padding: 1.5rem 1.25rem 0;
     }
 
-    .journey-step {
-        padding: 6px 10px;
-        gap: 6px;
+    .btn-hero-cta {
+        width: 100%;
+        font-size: 1.05rem;
+        padding: 1rem 1.5rem;
     }
 
-    .journey-label {
-        display: none;
-    }
-
-    .journey-step.active .journey-label {
-        display: block;
-        font-size: 12px;
-    }
-
-    .journey-num {
-        width: 22px;
-        height: 22px;
-        font-size: 11px;
-    }
-
-    .journey-arrow {
-        font-size: 11px;
-        margin: 0 2px;
-    }
-
-    .question-container {
-        padding: 0.75rem;
-        align-items: center;
-    }
-
-    .form-pre-header {
-        font-size: 13px;
-        padding: 9px 16px;
-        margin-bottom: 12px;
+    .form-section {
+        padding: 2rem 0.75rem 1.5rem;
     }
 
     .form-wrapper {
         padding: 1.5rem 1.25rem;
-        border-radius: 14px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    }
-
-    .form-qualify-header {
-        margin: -1.5rem -1.25rem 1.25rem -1.25rem;
-        padding: 16px 20px 14px;
-        border-radius: 14px 14px 0 0;
-    }
-
-    .form-qualify-title {
-        font-size: 16px;
+        border-radius: 12px;
     }
 
     .step-title {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
         line-height: 1.35;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.6rem;
     }
 
     .step-subtitle {
@@ -1055,114 +834,42 @@ body {
         margin-bottom: 1rem;
     }
 
-    .progress-container {
-        margin-bottom: 1.5rem;
-    }
-
-    .progress-text {
-        font-size: 0.8rem;
-    }
+    .progress-container { margin-bottom: 1.5rem; }
+    .progress-text { font-size: 0.8rem; }
 
     .radio-card {
-        padding: 0.9rem 1rem;
-        border-radius: 10px;
+        padding: 0.85rem 1rem;
+        border-radius: 8px;
         min-height: 50px;
     }
 
-    .radio-label {
-        font-size: 0.95rem;
-    }
+    .radio-label { font-size: 0.9rem; }
+    .radio-group { gap: 8px; margin-bottom: 1.25rem; }
 
-    .radio-group {
-        gap: 8px;
-        margin-bottom: 1.25rem;
-    }
+    /* Buttons stay inline */
+    .form-step .btn-block { display: block; }
+    .form-buttons { display: flex; }
+    #stepBooking .btn-booking-gold { display: block !important; }
 
-    /* Buttons stay inline on mobile */
-    .form-step .btn-block,
-    .form-buttons {
-        display: flex;
-    }
+    .booking-result-title { font-size: 1.2rem; }
+    .booking-result-sub { font-size: 13px; }
 
-    .form-step .btn-block {
-        display: block;
-    }
-
-    #stepBooking .btn-booking-gold {
-        display: block !important;
-    }
-
-    .booking-result-title {
-        font-size: 1.2rem;
-    }
-
-    .booking-result-sub {
-        font-size: 13px;
-    }
-
-    .value-section {
-        padding: 36px 16px 48px;
-    }
-
-    .value-cards {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-
-    .value-card {
-        padding: 18px 16px;
-    }
-
-    .value-card:hover {
-        transform: none;
-    }
-
-    .value-card-icon {
-        font-size: 22px;
-        margin-bottom: 10px;
-    }
-
-    .section-label {
-        font-size: 10px;
-        margin-bottom: 20px;
-    }
-
-    .simple-footer {
-        padding: 1.25rem;
-        font-size: 0.8rem;
-    }
+    .value-section { padding: 36px 16px 48px; }
+    .value-cards { grid-template-columns: 1fr; gap: 10px; }
+    .value-card { padding: 18px 16px; }
+    .value-card:hover { transform: none; }
+    .value-card-icon { font-size: 20px; margin-bottom: 8px; }
+    .section-label { font-size: 10px; margin-bottom: 18px; }
+    .simple-footer { padding: 1.25rem; font-size: 0.8rem; }
 }
 
 /* ===========================
    EXTRA SMALL
    =========================== */
 @media (max-width: 374px) {
-    .form-wrapper {
-        padding: 1.25rem 1rem;
-    }
-
-    .form-qualify-header {
-        margin: -1.25rem -1rem 1.25rem -1rem;
-    }
-
-    .step-title {
-        font-size: 1.1rem;
-    }
-
-    .radio-card {
-        padding: 0.8rem 0.9rem;
-    }
-
-    .radio-label {
-        font-size: 0.9rem;
-    }
-
-    .logo-word,
-    .logo-accent {
-        font-size: 1.1rem;
-    }
-
-    .logo-sub {
-        font-size: 0.75rem;
-    }
+    .form-wrapper { padding: 1.25rem 1rem; }
+    .step-title { font-size: 1.05rem; }
+    .radio-card { padding: 0.8rem 0.9rem; }
+    .radio-label { font-size: 0.875rem; }
+    .logo-text { font-size: 1.1rem; }
 }
