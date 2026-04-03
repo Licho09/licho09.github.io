@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Your Call - Foam Flow Leads</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JKLEK6QQDY"></script>
@@ -35,55 +38,34 @@
             src="https://www.facebook.com/tr?id=1525517045371976&ev=PageView&noscript=1" />
     </noscript>
     <!-- End Meta Pixel Code -->
-
 </head>
 
 <body>
     <div class="app-container">
 
+        <!-- HEADER -->
         <header class="simple-header">
-            <div class="logo-text">
-                <a href="index.html" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:0.3rem;">
-                    <span class="logo-icon">🔥</span>
-                    <span class="logo-word">Foam</span>
-                    <span class="logo-accent">Flow</span>
-                    <span class="logo-divider"></span>
-                    <span class="logo-sub">Leads</span>
-                </a>
-            </div>
+            <a href="index.html" class="logo-link">
+                <div class="logo-text">FOAM FLOW LEADS</div>
+            </a>
         </header>
 
-        <section class="hero-text">
-            <p class="hero-eyebrow">One Last Step</p>
+        <!-- HERO -->
+        <section class="hero-text booking-hero">
+            <p class="booking-step-tag">✅ Almost There — One Last Step</p>
             <h1 class="hero-headline">Book Your Free<br>Strategy Call</h1>
-            <p class="hero-subtext">A short 30-min Zoom call to map out how we get you consistent spray foam jobs.</p>
+            <p class="hero-subtext">A short 30-min Zoom call where we map out exactly how to get you consistent spray foam jobs in your area.</p>
         </section>
 
-        <!-- Journey Step Indicator — step 3 active -->
-        <div class="journey-steps">
-            <div class="journey-step done">
-                <div class="journey-num"><span>1</span></div>
-                <span class="journey-label">Your Info</span>
-            </div>
-            <div class="journey-arrow">→</div>
-            <div class="journey-step done">
-                <div class="journey-num"><span>2</span></div>
-                <span class="journey-label">Quick Question</span>
-            </div>
-            <div class="journey-arrow">→</div>
-            <div class="journey-step active">
-                <div class="journey-num"><span>3</span></div>
-                <span class="journey-label">Book Your Call</span>
-            </div>
-        </div>
-
+        <!-- BOOKING BODY -->
         <main class="booking-container">
             <div class="booking-split-wrapper">
 
-                <!-- Left: Form -->
+                <!-- LEFT: Form -->
                 <div class="booking-form-side">
-                    <h2 class="step-title">Your Details</h2>
-                    <p class="step-subtitle">Confirm your info to lock in your spot. No contracts, no pressure &mdash; just a free 30-min call.</p>
+                    <h2 class="step-title">Confirm Your Details</h2>
+                    <p class="step-subtitle">No contracts, no pressure — just a free 30-min call.</p>
+
                     <form id="bookingForm">
                         <div class="form-group">
                             <label for="userName" class="field-label">Full Name</label>
@@ -93,15 +75,22 @@
                             <label for="userPhone" class="field-label">Phone Number</label>
                             <input type="tel" id="userPhone" name="userPhone" placeholder="(555) 000-0000" required class="text-input">
                         </div>
+
                         <div class="selected-info" id="selectedInfo">
                             <p><strong>Selected:</strong> <span id="displayDateTime">Please select a date and time</span></p>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block btn-disabled" disabled>Confirm My Free Call</button>
+
+                        <button type="submit" class="btn btn-booking-gold btn-block btn-disabled" disabled>
+                            Confirm My Free Call →
+                        </button>
+
+                        <p class="booking-trust-line">No sales pressure · 30-min Zoom · Texas contractors only</p>
+
                         <a href="index.html" class="back-link">← Back to questions</a>
                     </form>
                 </div>
 
-                <!-- Right: Calendar -->
+                <!-- RIGHT: Calendar -->
                 <div class="booking-calendar-side">
                     <div class="calendar-section-title">Pick a Date</div>
                     <div class="calendar-header">
@@ -109,7 +98,13 @@
                     </div>
                     <div class="calendar-widget">
                         <div class="calendar-days-header">
-                            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                            <span>Sun</span>
+                            <span>Mon</span>
+                            <span>Tue</span>
+                            <span>Wed</span>
+                            <span>Thu</span>
+                            <span>Fri</span>
+                            <span>Sat</span>
                         </div>
                         <div class="calendar-grid" id="calendarGrid"></div>
                     </div>
@@ -124,9 +119,18 @@
             </div>
         </main>
 
+        <!-- MOBILE STICKY CONFIRM BUTTON -->
+        <div class="mobile-booking-sticky" id="mobileBookingSticky">
+            <button type="button" class="btn btn-booking-gold btn-block btn-disabled" id="mobileStickyBtn" disabled
+                onclick="document.getElementById('bookingForm').dispatchEvent(new Event('submit'))">
+                Confirm My Free Call →
+            </button>
+        </div>
+
         <footer class="simple-footer">
-            <p>&copy; 2026 Foam Flow Leads. All rights reserved.</p>
+            <p>© 2026 Foam Flow Leads. All rights reserved.</p>
         </footer>
+
     </div>
 
     <script src="booking.js"></script>
