@@ -1,357 +1,312 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    const calendarGrid = document.getElementById('calendarGrid');
-    const timeGrid = document.getElementById('timeGrid');
-    const currentMonthYear = document.getElementById('currentMonthYear');
-    const displayDateTime = document.getElementById('displayDateTime');
-    const bookingForm = document.getElementById('bookingForm');
-    const userNameInput = document.getElementById('userName');
-    const userPhoneInput = document.getElementById('userPhone');
-
+    // ─── CONFIG ─────────────────────────────────────────────
     const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyQn65Ow5YEMMY4kNN2PNK5FzdysBV3igm5a69EAN-QeZgBgFJz2khkIhkrl3ljDYX6/exec';
+    const AVAILABLE_DAYS_FROM_TODAY = 1;   // start from tomorrow
+    const AVAILABLE_DAYS_AHEAD      = 3;   // only next 3 days clickable
+    const TIME_SLOTS = ['9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-    let selectedDate = null;
-    let selectedTime = null;
-    let bookedSlots = [];
+    // ─── STATE ──────────────────────────────────────────────
+    let currentPanel = 1;   // 1 = date, 2 = time, 3 = confirm
+    let selectedDate  = null;
+    let selectedTime  = null;
+    let bookedSlots   = [];
+    let viewYear, viewMonth;
 
-    // ─── PRE-FILL FROM URL PARAMS ────────────────────────────
-    const params = new URLSearchParams(window.location.search);
-    const prefillName = params.get('name') || '';
-    const prefillPhone = params.get('phone') || '';
-    const prefillSituation = params.get('situation') || '';
-    const prefillExperience = params.get('experience') || '';
+    // ─── URL PARAMS (prefill) ────────────────────────────────
+    const params        = new URLSearchParams(window.location.search);
+    const prefillName   = params.get('name')        || '';
+    const prefillPhone  = params.get('phone')       || '';
+    const prefillJobs   = params.get('jobsPerMonth')|| '';
+    const prefillExp    = params.get('experience')  || '';
 
-    if (userNameInput && prefillName) userNameInput.value = prefillName;
-    if (userPhoneInput && prefillPhone) userPhoneInput.value = prefillPhone;
+    const nameInput  = document.getElementById('userName');
+    const phoneInput = document.getElementById('userPhone');
+    if (nameInput  && prefillName)  nameInput.value  = prefillName;
+    if (phoneInput && prefillPhone) phoneInput.value = prefillPhone;
 
-    // ─── GA4 ─────────────────────────────────────────────────
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'booking_page_view', { event_category: 'Booking', event_label: 'Booking Page Loaded' });
+    // ─── DATE HELPERS ────────────────────────────────────────
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    function dateKey(d) {
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     }
 
-    // ─── MOBILE DETECTION ────────────────────────────────────
-    const isMobile = () => window.innerWidth <= 768;
-    let mobileStep = 'calendar';
-    let stickyFooter = null;
-    let mobileBackBtn = null;
-    let mobileContinueBtn = null;
-    let mobileInitialized = false;
-    let scrollRestoreTimeout = null;
-
-    function buildMobileFooter() {
-        if (stickyFooter) return;
-
-        stickyFooter = document.createElement('div');
-        stickyFooter.className = 'mobile-booking-sticky';
-        stickyFooter.style.cssText = 'display:none; position:fixed; bottom:0; left:0; right:0; padding:12px 16px; background:var(--bg-card,#fff); border-top:1px solid var(--border,#eee); gap:10px; z-index:999; will-change:transform;';
-
-        mobileBackBtn = document.createElement('button');
-        mobileBackBtn.className = 'btn btn-secondary';
-        mobileBackBtn.style.flex = '1';
-        mobileBackBtn.textContent = 'Back';
-        mobileBackBtn.style.display = 'none';
-
-        mobileContinueBtn = document.createElement('button');
-        mobileContinueBtn.className = 'btn btn-primary';
-        mobileContinueBtn.style.flex = '2';
-        mobileContinueBtn.textContent = 'Continue';
-
-        mobileBackBtn.addEventListener('click', function () {
-            if (mobileStep === 'time') goToStep('calendar');
-            else if (mobileStep === 'form') goToStep('time');
-        });
-
-        mobileContinueBtn.addEventListener('click', function () {
-            if (mobileContinueBtn.disabled) return;
-            if (mobileStep === 'calendar' && selectedDate) goToStep('time');
-            else if (mobileStep === 'time' && selectedTime) goToStep('form');
-        });
-
-        stickyFooter.appendChild(mobileBackBtn);
-        stickyFooter.appendChild(mobileContinueBtn);
-        document.body.appendChild(stickyFooter);
+    function slotKey(date, time) {
+        return `${dateKey(date)}|${time}`;
     }
 
-    function goToStep(step) {
-        mobileStep = step;
-
-        // Show/hide sections based on step — NO scroll reset
-        const calendarSide = document.querySelector('.booking-calendar-side');
-        const formSide = document.querySelector('.booking-form-side');
-        const timeSlotsContainer = document.getElementById('timeSlotsContainer');
-
-        if (step === 'calendar') {
-            if (calendarSide) calendarSide.style.display = '';
-            if (timeSlotsContainer) timeSlotsContainer.style.display = 'none';
-            if (formSide) formSide.style.display = 'none';
-            // Use requestAnimationFrame to avoid layout thrashing
-            requestAnimationFrame(() => {
-                window.scrollTo({ top: 0, behavior: 'auto' });
-            });
-        } else if (step === 'time') {
-            if (calendarSide) calendarSide.style.display = '';
-            if (timeSlotsContainer) {
-                timeSlotsContainer.style.display = 'block';
-                // Defer scroll to avoid jank
-                requestAnimationFrame(() => {
-                    timeSlotsContainer.scrollIntoView({ behavior: 'auto', block: 'start' });
-                });
-            }
-            if (formSide) formSide.style.display = 'none';
-        } else if (step === 'form') {
-            if (calendarSide) calendarSide.style.display = 'none';
-            if (formSide) {
-                formSide.style.display = '';
-                requestAnimationFrame(() => {
-                    window.scrollTo({ top: 0, behavior: 'auto' });
-                });
-            }
-        }
-
-        updateMobileFooter();
-
-        if (typeof gtag !== 'undefined') {
-            if (step === 'time') gtag('event', 'booking_date_selected', { event_category: 'Booking', event_label: 'Date Selected' });
-            if (step === 'form') gtag('event', 'booking_time_selected', { event_category: 'Booking', event_label: 'Time Selected' });
-        }
+    function isAvailable(d) {
+        const diff = Math.round((d - today) / 86400000);
+        const dow  = d.getDay();
+        // Mon–Sat, 1–14 days ahead, not Sunday
+        return diff >= AVAILABLE_DAYS_FROM_TODAY &&
+               diff <= AVAILABLE_DAYS_AHEAD &&
+               dow !== 0;
     }
 
-    function updateMobileFooter() {
-        if (!isMobile() || !stickyFooter) return;
-
-        if (mobileStep === 'form') {
-            stickyFooter.style.display = 'none';
-            return;
-        }
-
-        stickyFooter.style.display = 'flex';
-        mobileBackBtn.style.display = mobileStep === 'time' ? 'block' : 'none';
-
-        const canContinue = (mobileStep === 'calendar' && selectedDate) ||
-            (mobileStep === 'time' && selectedTime);
-
-        mobileContinueBtn.disabled = !canContinue;
-        mobileContinueBtn.style.opacity = canContinue ? '1' : '0.4';
-        mobileContinueBtn.style.cursor = canContinue ? 'pointer' : 'not-allowed';
-        mobileContinueBtn.textContent = mobileStep === 'calendar'
-            ? 'Next: Pick a Time →'
-            : 'Next: Your Details →';
-    }
-
-    function initMobileFlow() {
-        if (!isMobile() || mobileInitialized) return;
-        mobileInitialized = true;
-        buildMobileFooter();
-
-        // Add bottom padding so sticky footer doesn't cover content
-        document.body.style.paddingBottom = '80px';
-
-        // Initially hide form side and time slots on mobile
-        const formSide = document.querySelector('.booking-form-side');
-        const timeSlotsContainer = document.getElementById('timeSlotsContainer');
-        if (formSide) formSide.style.display = 'none';
-        if (timeSlotsContainer) timeSlotsContainer.style.display = 'none';
-
-        stickyFooter.style.display = 'flex';
-        updateMobileFooter();
+    function formatDate(d) {
+        return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
     }
 
     // ─── CALENDAR ────────────────────────────────────────────
-    if (calendarGrid && currentMonthYear) {
-        const now = new Date();
-        const todayMs = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-        const msPerDay = 86400000;
+    const calGrid      = document.getElementById('calGrid');
+    const calMonthTitle = document.getElementById('calMonthTitle');
+    const calPrevBtn   = document.getElementById('calPrevBtn');
+    const calNextBtn   = document.getElementById('calNextBtn');
 
-        const tomorrow = new Date(todayMs + msPerDay);
-        const displayYear = tomorrow.getFullYear();
-        const displayMonth = tomorrow.getMonth();
+    // Start on current month
+    viewYear  = today.getFullYear();
+    viewMonth = today.getMonth();
 
-        function initCalendar() {
-            const months = ['January', 'February', 'March', 'April', 'May', 'June',
-                'July', 'August', 'September', 'October', 'November', 'December'];
-            currentMonthYear.textContent = `${months[displayMonth]} ${displayYear}`;
+    function renderCalendar() {
+        calMonthTitle.textContent = `${MONTHS[viewMonth]} ${viewYear}`;
 
-            const firstDay = new Date(displayYear, displayMonth, 1).getDay();
-            const daysInMonth = new Date(displayYear, displayMonth + 1, 0).getDate();
-            
-            // Use DocumentFragment to batch DOM updates
-            const fragment = document.createDocumentFragment();
+        // Prev/next button state
+        const thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+        const viewStart      = new Date(viewYear, viewMonth, 1);
+        calPrevBtn.disabled  = viewStart <= thisMonthStart;
 
-            for (let i = 0; i < firstDay; i++) {
-                const empty = document.createElement('div');
-                empty.className = 'calendar-day';
-                fragment.appendChild(empty);
-            }
+        const firstDay    = new Date(viewYear, viewMonth, 1).getDay();
+        const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
 
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayEl = document.createElement('div');
-                dayEl.className = 'calendar-day';
-                dayEl.textContent = day;
+        const frag = document.createDocumentFragment();
 
-                const thisDateMs = new Date(displayYear, displayMonth, day).getTime();
-                const diffDays = Math.round((thisDateMs - todayMs) / msPerDay);
+        // Empty cells before first day
+        for (let i = 0; i < firstDay; i++) {
+            const empty = document.createElement('div');
+            frag.appendChild(empty);
+        }
 
-                if (diffDays >= 1 && diffDays <= 3) {
-                    dayEl.classList.add('available');
-                    // Use event delegation to reduce event listeners
-                    dayEl.dataset.day = day;
-                    dayEl.addEventListener('click', handleDateClick);
+        for (let d = 1; d <= daysInMonth; d++) {
+            const date    = new Date(viewYear, viewMonth, d);
+            const dayEl   = document.createElement('div');
+            dayEl.className = 'cal-day';
+            dayEl.textContent = d;
+
+            if (date < today) {
+                dayEl.classList.add('past');
+            } else if (date.getTime() === today.getTime()) {
+                dayEl.classList.add('today');
+            } else if (isAvailable(date)) {
+                dayEl.classList.add('available');
+                if (selectedDate && dateKey(date) === dateKey(selectedDate)) {
+                    dayEl.classList.add('selected');
                 }
-
-                fragment.appendChild(dayEl);
+                dayEl.addEventListener('click', () => onDateClick(date, dayEl));
             }
 
-            calendarGrid.innerHTML = '';
-            calendarGrid.appendChild(fragment);
+            frag.appendChild(dayEl);
         }
 
-        function handleDateClick(e) {
-            const dayEl = e.currentTarget;
-            const day = parseInt(dayEl.dataset.day);
-            
-            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
-            dayEl.classList.add('selected');
-            selectedDate = new Date(displayYear, displayMonth, day);
-            selectedTime = null; // reset time when date changes
-            updateDisplay();
-            generateTimeSlots();
+        calGrid.innerHTML = '';
+        calGrid.appendChild(frag);
+    }
 
-            if (isMobile()) {
-                updateMobileFooter();
-                // On mobile, auto-advance to time step after picking date
-                requestAnimationFrame(() => {
-                    goToStep('time');
-                });
-            } else {
-                const tsContainer = document.getElementById('timeSlotsContainer');
-                if (tsContainer) tsContainer.style.display = 'block';
-            }
+    calPrevBtn.addEventListener('click', () => {
+        viewMonth--;
+        if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+        renderCalendar();
+    });
+
+    calNextBtn.addEventListener('click', () => {
+        viewMonth++;
+        if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+        renderCalendar();
+    });
+
+    function onDateClick(date) {
+        selectedDate = date;
+        selectedTime = null;
+        renderCalendar();           // re-render to show selected state
+        renderTimeSlots();
+        updateStickyFooter();
+
+        // On mobile auto-advance; on desktop stay and show sticky enabled
+        if (isMobile()) {
+            setTimeout(() => goToPanel(2), 200);
+        } else {
+            // Desktop: just update sticky (it's hidden on desktop anyway)
+            // but also auto-show time panel smoothly
+            goToPanel(2);
         }
-
-        initCalendar();
     }
 
     // ─── TIME SLOTS ──────────────────────────────────────────
-    function slotKey(date, time) {
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, '0');
-        const d = String(date.getDate()).padStart(2, '0');
-        return `${y}-${m}-${d}|${time}`;
-    }
+    const timeGrid = document.getElementById('timeGrid');
+    const timeSelectedDate = document.getElementById('timeSelectedDate');
 
-    function generateTimeSlots() {
-        if (!timeGrid) return;
-        
-        // Use DocumentFragment for batch DOM updates
-        const fragment = document.createDocumentFragment();
-        const times = ['9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
-        
-        times.forEach(time => {
-            const timeBtn = document.createElement('div');
-            timeBtn.className = 'time-btn';
-            timeBtn.textContent = time;
-            timeBtn.dataset.time = time;
+    function renderTimeSlots() {
+        if (!selectedDate) return;
+        timeSelectedDate.textContent = formatDate(selectedDate);
 
-            const isBooked = selectedDate && bookedSlots.includes(slotKey(selectedDate, time));
+        const frag = document.createDocumentFragment();
+        TIME_SLOTS.forEach(time => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'time-slot-btn';
+            btn.textContent = time;
 
+            const isBooked = bookedSlots.includes(slotKey(selectedDate, time));
             if (isBooked) {
-                timeBtn.classList.add('time-btn-booked');
-                timeBtn.title = 'Already booked';
+                btn.classList.add('booked');
+                btn.disabled = true;
             } else {
-                timeBtn.addEventListener('click', handleTimeClick);
+                if (selectedTime === time) btn.classList.add('active');
+                btn.addEventListener('click', () => onTimeClick(time, btn));
             }
 
-            fragment.appendChild(timeBtn);
+            frag.appendChild(btn);
         });
 
         timeGrid.innerHTML = '';
-        timeGrid.appendChild(fragment);
+        timeGrid.appendChild(frag);
     }
 
-    function handleTimeClick(e) {
-        const timeBtn = e.currentTarget;
-        const time = timeBtn.dataset.time;
-        
-        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
-        timeBtn.classList.add('active');
+    function onTimeClick(time, btn) {
         selectedTime = time;
-        updateDisplay();
-        if (isMobile()) updateMobileFooter();
-    }
+        document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateStickyFooter();
 
-    // ─── FETCH BOOKED SLOTS ──────────────────────────────────
-    function fetchBookedSlots() {
-        return fetch(GOOGLE_SHEET_URL + '?action=getBookings')
-            .then(res => res.json())
-            .then(data => {
-                if (Array.isArray(data.booked)) {
-                    bookedSlots = data.booked;
-                }
-            })
-            .catch(() => {
-                bookedSlots = [];
-            });
-    }
-
-    function updateDisplay() {
-        if (!displayDateTime) return;
-        const submitBtn = bookingForm?.querySelector('button[type="submit"]');
-
-        if (selectedDate && selectedTime) {
-            const options = { weekday: 'short', month: 'short', day: 'numeric' };
-            displayDateTime.textContent = `${selectedDate.toLocaleDateString(undefined, options)} at ${selectedTime}`;
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('btn-disabled');
-            }
-        } else if (selectedDate) {
-            const options = { weekday: 'short', month: 'short', day: 'numeric' };
-            displayDateTime.textContent = `${selectedDate.toLocaleDateString(undefined, options)} — select a time`;
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.classList.add('btn-disabled');
-            }
+        if (isMobile()) {
+            setTimeout(() => goToPanel(3), 200);
         } else {
-            displayDateTime.textContent = 'Please select a date and time';
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.classList.add('btn-disabled');
-            }
+            goToPanel(3);
         }
     }
 
+    // ─── PANEL NAVIGATION ────────────────────────────────────
+    const panels = {
+        1: document.getElementById('panelDate'),
+        2: document.getElementById('panelTime'),
+        3: document.getElementById('panelConfirm'),
+    };
+
+    const navSteps = {
+        1: document.getElementById('bNav1'),
+        2: document.getElementById('bNav2'),
+        3: document.getElementById('bNav3'),
+    };
+
+    function goToPanel(n) {
+        // Hide all
+        Object.values(panels).forEach(p => p.classList.remove('active'));
+        // Show target
+        panels[n].classList.add('active');
+        currentPanel = n;
+
+        // Update nav pills
+        Object.keys(navSteps).forEach(k => {
+            const step = navSteps[k];
+            const ki = parseInt(k);
+            step.classList.remove('active', 'done');
+            if (ki === n) step.classList.add('active');
+            else if (ki < n) step.classList.add('done');
+        });
+
+        // Update confirm summary
+        if (n === 3 && selectedDate && selectedTime) {
+            document.getElementById('confirmSummary').textContent =
+                `${formatDate(selectedDate)} at ${selectedTime}`;
+        }
+
+        // Scroll to top smoothly
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        updateStickyFooter();
+
+        // GA4
+        if (typeof gtag !== 'undefined') {
+            const labels = { 1: 'Date Panel', 2: 'Time Panel', 3: 'Confirm Panel' };
+            gtag('event', 'booking_panel_view', { event_category: 'Booking', event_label: labels[n] });
+        }
+    }
+
+    // ─── STICKY FOOTER ──────────────────────────────────────
+    const bookingSticky = document.getElementById('bookingSticky');
+    const stickyBackBtn = document.getElementById('stickyBackBtn');
+    const stickyNextBtn = document.getElementById('stickyNextBtn');
+
+    function isMobile() { return window.innerWidth <= 900; }
+
+    function updateStickyFooter() {
+        if (!bookingSticky) return;
+
+        // Hide sticky on confirm panel (form has its own button)
+        if (currentPanel === 3) {
+            bookingSticky.style.display = 'none';
+            return;
+        }
+
+        bookingSticky.style.display = 'flex';
+
+        // Back button
+        stickyBackBtn.style.display = currentPanel > 1 ? 'block' : 'none';
+
+        // Next button state
+        const canProceed = (currentPanel === 1 && selectedDate) ||
+                           (currentPanel === 2 && selectedTime);
+
+        stickyNextBtn.disabled = !canProceed;
+
+        if (currentPanel === 1) {
+            stickyNextBtn.textContent = selectedDate
+                ? `Continue with ${selectedDate.toLocaleDateString('en-US',{month:'short',day:'numeric'})} →`
+                : 'Select a date to continue';
+        } else if (currentPanel === 2) {
+            stickyNextBtn.textContent = selectedTime
+                ? `Continue with ${selectedTime} →`
+                : 'Select a time to continue';
+        }
+    }
+
+    stickyBackBtn.addEventListener('click', () => {
+        if (currentPanel > 1) goToPanel(currentPanel - 1);
+    });
+
+    stickyNextBtn.addEventListener('click', () => {
+        if (stickyNextBtn.disabled) return;
+        if (currentPanel === 1 && selectedDate) goToPanel(2);
+        else if (currentPanel === 2 && selectedTime) goToPanel(3);
+    });
+
     // ─── FORM SUBMIT ─────────────────────────────────────────
+    const bookingForm = document.getElementById('bookingForm');
+
     if (bookingForm) {
         bookingForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
-            const name = userNameInput?.value?.trim();
-            const phone = userPhoneInput?.value?.trim();
+            const name  = nameInput?.value?.trim();
+            const phone = phoneInput?.value?.trim();
 
             if (!name || !phone) {
                 alert('Please enter your name and phone number.');
                 return;
             }
             if (!selectedDate || !selectedTime) {
-                alert('Please select a date and time.');
+                alert('Please go back and select a date and time.');
                 return;
             }
 
-            const submitBtn = bookingForm.querySelector('button[type="submit"]');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Processing...';
+            const confirmBtn   = document.getElementById('desktopConfirmBtn');
+            const confirmText  = `${formatDate(selectedDate)} at ${selectedTime}`;
+
+            if (confirmBtn) {
+                confirmBtn.disabled = true;
+                confirmBtn.textContent = 'Confirming...';
             }
 
-            const selectedDateTimeText = displayDateTime?.textContent || '';
-
-            const finalData = {
+            const payload = {
                 type: 'booking',
                 name,
                 phone,
-                dateTime: selectedDateTimeText,
-                situation: prefillSituation,
-                experience: prefillExperience,
+                dateTime: confirmText,
+                jobsPerMonth: prefillJobs,
+                experience: prefillExp,
                 status: 'Booked'
             };
 
@@ -362,57 +317,58 @@ document.addEventListener('DOMContentLoaded', function () {
                 fbq('track', 'Schedule');
             }
 
-            const formData = new FormData();
-            formData.append('data', JSON.stringify(finalData));
-
+            // Optimistic: mark slot as booked locally
             if (selectedDate && selectedTime) {
                 bookedSlots.push(slotKey(selectedDate, selectedTime));
             }
 
+            const formData = new FormData();
+            formData.append('data', JSON.stringify(payload));
+
             fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
                 .then(() => {
-                    // Pass booking details to success page via URL params
-                    const successParams = new URLSearchParams({
-                        name: name,
-                        phone: phone,
-                        dateTime: selectedDateTimeText
-                    });
-                    window.location.href = 'success.html?' + successParams.toString();
+                    const sp = new URLSearchParams({ name, phone, dateTime: confirmText });
+                    window.location.href = 'success.html?' + sp.toString();
                 })
-                .catch(error => {
-                    alert('There was an error submitting. Please try again.');
-                    if (submitBtn) {
-                        submitBtn.disabled = false;
-                        submitBtn.classList.remove('btn-disabled');
-                        submitBtn.textContent = 'Confirm My Free Call';
+                .catch(err => {
+                    console.error(err);
+                    alert('Something went wrong. Please try again.');
+                    if (confirmBtn) {
+                        confirmBtn.disabled = false;
+                        confirmBtn.textContent = 'Confirm My Free Call →';
                     }
-                    console.error(error);
                 });
         });
     }
 
+    // ─── FETCH BOOKED SLOTS ──────────────────────────────────
+    function fetchBookedSlots() {
+        return fetch(GOOGLE_SHEET_URL + '?action=getBookings')
+            .then(r => r.json())
+            .then(data => {
+                if (Array.isArray(data.booked)) bookedSlots = data.booked;
+            })
+            .catch(() => { bookedSlots = []; });
+    }
+
     // ─── RESIZE ──────────────────────────────────────────────
-    let resizeTimeout;
+    let resizeTimer;
     window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            if (!isMobile()) {
-                if (stickyFooter) stickyFooter.style.display = 'none';
-                document.body.style.paddingBottom = '';
-                // Show everything on desktop
-                const formSide = document.querySelector('.booking-form-side');
-                const calendarSide = document.querySelector('.booking-calendar-side');
-                const timeSlotsContainer = document.getElementById('timeSlotsContainer');
-                if (formSide) formSide.style.display = '';
-                if (calendarSide) calendarSide.style.display = '';
-                if (timeSlotsContainer) timeSlotsContainer.style.display = '';
-            }
-        }, 150);
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(updateStickyFooter, 150);
     }, { passive: true });
 
     // ─── INIT ─────────────────────────────────────────────────
-    updateDisplay();
-    fetchBookedSlots().finally(() => {
-        initMobileFlow();
+    renderCalendar();
+    updateStickyFooter();
+
+    // Fetch booked slots in background — don't block UI
+    fetchBookedSlots().then(() => {
+        // Re-render time slots if a date is already selected
+        if (selectedDate) renderTimeSlots();
     });
+
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'booking_page_view', { event_category: 'Booking', event_label: 'Booking Page Loaded' });
+    }
 });
