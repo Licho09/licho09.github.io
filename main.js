@@ -293,6 +293,8 @@ document.addEventListener('change', function (e) {
   }
 });
 
+// Wire up step 2 and 3 buttons — handled in INIT below
+
 // =====================
 // MOBILE STICKY FOOTER
 // =====================
@@ -342,4 +344,8 @@ window.addEventListener('resize', updateMobileFooter);
 // =====================
 document.addEventListener('DOMContentLoaded', () => {
     showStep(1);
+    const btn2 = document.getElementById('nextBtn2');
+    const btn3 = document.getElementById('nextBtn3');
+    if (btn2) btn2.addEventListener('click', () => { if (!btn2.disabled) nextStep(2); });
+    if (btn3) btn3.addEventListener('click', () => { if (!btn3.disabled) showBooking(); });
 });
