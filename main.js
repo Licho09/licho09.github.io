@@ -57,7 +57,6 @@ function launchConfetti() {
 // =====================
 // GOOGLE SHEET URL
 // =====================
-// ⚠️ IMPORTANT: Replace this URL with your actual Google Apps Script Web App URL
 const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyQn65Ow5YEMMY4kNN2PNK5FzdysBV3igm5a69EAN-QeZgBgFJz2khkIhkrl3ljDYX6/exec';
 
 // =====================
@@ -70,29 +69,29 @@ let onResultsScreen = false;
 // =====================
 // PROGRESSIVE CAPTURE LOGIC
 // =====================
-function saveProgress(stepStatus ) {
+function saveProgress(stepStatus) {
     const name = document.getElementById('userName')?.value.trim() || localStorage.getItem('leadName') || '';
     const phone = document.getElementById('userPhone')?.value.trim() || localStorage.getItem('leadPhone') || '';
-    
-    // Save to memory so we don't lose it on next steps
+
     if (name) localStorage.setItem('leadName', name);
     if (phone) localStorage.setItem('leadPhone', phone);
 
-    const situation = document.querySelector('input[name="situation"]:checked')?.value || '';
+    // Step 2 is now jobsPerMonth
+    const jobsPerMonth = document.querySelector('input[name="jobsPerMonth"]:checked')?.value || '';
     const experience = document.querySelector('input[name="experience"]:checked')?.value || '';
 
     const payload = {
         type: stepStatus === 'Complete' ? 'survey' : 'partial',
         name: name,
         phone: phone,
-        situation: situation,
+        jobsPerMonth: jobsPerMonth,
         experience: experience,
         status: stepStatus
     };
 
     const formData = new FormData();
     formData.append('data', JSON.stringify(payload));
-    
+
     fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
         .then(res => res.json())
         .then(data => console.log('Saved:', stepStatus, data))
@@ -132,10 +131,10 @@ function updateProgress(step) {
   const pct = step === 'booking' ? 100 : ((step - 1) / TOTAL_STEPS) * 100;
   const progressBar = document.getElementById('progressBar');
   if (progressBar) progressBar.style.width = pct + '%';
-  
+
   const currentStepSpan = document.getElementById('currentStep');
   if (currentStepSpan) currentStepSpan.textContent = step === 'booking' ? TOTAL_STEPS : step;
-  
+
   const totalStepsSpan = document.getElementById('totalSteps');
   if (totalStepsSpan) totalStepsSpan.textContent = TOTAL_STEPS;
 }
@@ -163,7 +162,8 @@ function checkStepReady(stepNum) {
       return !!(name && phone);
   }
   if (stepNum === 2) {
-      return !!document.querySelector('input[name="situation"]:checked');
+      // Updated: now checking jobsPerMonth
+      return !!document.querySelector('input[name="jobsPerMonth"]:checked');
   }
   if (stepNum === 3) {
       return !!document.querySelector('input[name="experience"]:checked');
@@ -203,14 +203,14 @@ function showStep(n) {
   updateMobileFooter();
 
   if (n !== 1) {
-      const container = document.querySelector('.question-container');
+      const container = document.querySelector('.question-container') || document.querySelector('.form-section');
       if (container) window.scrollTo({ top: container.offsetTop - 16, behavior: 'smooth' });
   }
 
   // GA4 step tracking
   if (typeof gtag !== 'undefined') {
       if (n === 1) gtag('event', 'quiz_step_1', { event_category: 'Quiz', event_label: 'Contact Info' });
-      if (n === 2) gtag('event', 'quiz_step_2', { event_category: 'Quiz', event_label: 'Current Situation' });
+      if (n === 2) gtag('event', 'quiz_step_2', { event_category: 'Quiz', event_label: 'Jobs Per Month' });
       if (n === 3) gtag('event', 'quiz_step_3', { event_category: 'Quiz', event_label: 'Experience' });
       if (n === 'booking') gtag('event', 'quiz_complete', { event_category: 'Quiz', event_label: 'Qualified' });
   }
@@ -227,11 +227,11 @@ function nextStep(from) {
             alert('Please enter your name and phone number.');
             return;
         }
-        saveProgress('Step 1 Only'); // Capture Step 1
+        saveProgress('Step 1 Only');
     }
-    
+
     if (from === 2) {
-        saveProgress('Step 2 Complete'); // Capture Step 2
+        saveProgress('Step 2 Complete');
     }
 
     showStep(from + 1);
@@ -242,22 +242,22 @@ function goBack(from) {
 }
 
 function showBooking() {
-    const situation = document.querySelector('input[name="situation"]:checked');
+    const jobsPerMonth = document.querySelector('input[name="jobsPerMonth"]:checked');
     const experience = document.querySelector('input[name="experience"]:checked');
-    
-    if (!situation || !experience) {
+
+    if (!jobsPerMonth || !experience) {
         alert('Please select an option to continue.');
         return;
     }
 
-    saveProgress('Complete'); // Capture Final Step
-    
+    saveProgress('Complete');
+
     showStep('booking');
     launchConfetti();
 
     if (typeof fbq !== 'undefined') fbq('track', 'Lead');
 
-    // Wire up the booking button to pass lead data via URL params
+    // Wire up booking button with lead data in URL params
     const bookingBtn = document.querySelector('#stepBooking .btn-booking-gold');
     if (bookingBtn) {
         const name = localStorage.getItem('leadName');
@@ -265,7 +265,7 @@ function showBooking() {
         const params = new URLSearchParams({
             name: name,
             phone: phone,
-            situation: situation.value,
+            jobsPerMonth: jobsPerMonth.value,
             experience: experience.value
         });
         bookingBtn.onclick = () => { window.location.href = `booking.html?${params.toString()}`; };
@@ -275,17 +275,15 @@ function showBooking() {
 // =====================
 // EVENT LISTENERS
 // =====================
-
-// Step 1 — enable Next as user types
 document.addEventListener('input', function (e) {
   if (e.target.id === 'userName' || e.target.id === 'userPhone') {
       setNextButtonState(1, checkStepReady(1));
   }
 });
 
-// Step 2 & 3 — enable button when radio selected
 document.addEventListener('change', function (e) {
-  if (e.target.name === 'situation') {
+  // Updated: jobsPerMonth replaces situation
+  if (e.target.name === 'jobsPerMonth') {
       setNextButtonState(2, true);
       updateMobileFooter();
   }
