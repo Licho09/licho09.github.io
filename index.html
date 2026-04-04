@@ -35,7 +35,67 @@
     </script>
     <noscript><img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id=1525517045371976&ev=PageView&noscript=1"/></noscript>
-    <!-- End Meta Pixel Code -->
+
+    <style>
+        /* ── PROOF IMAGE (hero section) ── */
+        .proof-image-wrap {
+            max-width: 480px;
+            margin: 0 auto 28px;
+            padding: 0 24px;
+            text-align: center;
+        }
+
+        .proof-image {
+            width: 100%;
+            border-radius: 10px;
+            border: 1.5px solid #e8e8e8;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: block;
+        }
+
+        .proof-image-caption {
+            font-size: 11px;
+            color: #888;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* ── RESULTS SCREEN OVERRIDES ── */
+        .result-value-box {
+            background: #fafafa;
+            border: 1.5px solid #e8e8e8;
+            border-left: 4px solid #f5d800;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .result-value-box-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #111;
+            margin-bottom: 4px;
+        }
+
+        .result-value-box-desc {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .result-urgency {
+            font-size: 13px;
+            font-weight: 700;
+            color: #c0392b;
+            text-align: center;
+            margin: 16px 0 20px;
+            padding: 10px 14px;
+            background: #fff5f5;
+            border-radius: 8px;
+            border: 1px solid #fcc;
+        }
+    </style>
 </head>
 
 <body>
@@ -49,22 +109,27 @@
         <!-- HERO -->
         <section class="hero-text">
             <h1 class="hero-headline">
-                We'll Fill Your Schedule With
-                <span class="headline-highlight">Consistent Spray Foam Jobs</span>
-                in Texas
+                Stop Losing Jobs to Slow Weeks.<br>
+                <span class="headline-highlight">We Fill Your Schedule</span>
+                With Inbound Spray Foam Requests.
             </h1>
             <p class="hero-subtext">
-                Stop relying on referrals and slow weeks.
-                We get <strong>active Texas spray foam crews</strong> a steady pipeline of local job requests — without cold calls or long-term contracts.
+                We run targeted Meta ads for <strong>Texas spray foam contractors</strong> that bring homeowners and GCs directly to you — no cold calls, no referral chasing, no long-term contracts.
             </p>
         </section>
+
+        <!-- PROOF IMAGE (above the fold, before form) -->
+        <div class="proof-image-wrap">
+            <img src="proof-metrics.jpg" alt="69 leads, $9.11 cost per lead, $628.54 spent" class="proof-image" loading="lazy">
+            <p class="proof-image-caption">Real results from a Texas contractor campaign</p>
+        </div>
 
         <!-- HERO CTA -->
         <div class="hero-cta-wrap">
             <button class="btn-hero-cta" onclick="document.getElementById('formSection').scrollIntoView({behavior:'smooth'})">
-                See If You Qualify →
+                See If Your Area Is Still Open →
             </button>
-            <p class="hero-cta-sub">👇 Takes 60 seconds — see if your area is still open</p>
+            <p class="hero-cta-sub">👇 Takes 60 seconds — Texas contractors only</p>
         </div>
 
         <!-- FORM SECTION -->
@@ -85,8 +150,8 @@
 
                     <!-- Step 1: Contact Info -->
                     <div class="form-step active" id="step1">
-                        <h2 class="step-title">First, let's get your contact info.</h2>
-                        <p class="step-subtitle">No spam, ever.</p>
+                        <h2 class="step-title">First, where do we send your results?</h2>
+                        <p class="step-subtitle">We'll check if your area is still available. No spam, ever.</p>
 
                         <div class="form-group">
                             <label for="userName" class="field-label">Full Name</label>
@@ -101,29 +166,26 @@
                         <button type="button" class="btn btn-primary btn-block btn-disabled" disabled onclick="nextStep(1)">Next →</button>
                     </div>
 
-                    <!-- Step 2: Current Situation -->
+                    <!-- Step 2: Jobs per month (qualification question) -->
                     <div class="form-step" id="step2">
-                        <h2 class="step-title">What best describes your current situation?</h2>
+                        <h2 class="step-title">How many jobs does your crew complete per month?</h2>
+                        <p class="step-subtitle">This helps us build the right lead plan for your capacity.</p>
                         <div class="radio-group">
                             <label class="radio-card">
-                                <input type="radio" name="situation" value="need-more-jobs">
-                                <span class="radio-label">We have work but need more consistent jobs</span>
+                                <input type="radio" name="jobsPerMonth" value="1-5">
+                                <span class="radio-label">1–5 jobs/month — just getting started</span>
                             </label>
                             <label class="radio-card">
-                                <input type="radio" name="situation" value="want-to-scale">
-                                <span class="radio-label">We are busy but want to scale</span>
+                                <input type="radio" name="jobsPerMonth" value="6-15">
+                                <span class="radio-label">6–15 jobs/month — steady but want more</span>
                             </label>
                             <label class="radio-card">
-                                <input type="radio" name="situation" value="inconsistent">
-                                <span class="radio-label">We are inconsistent / have slow weeks</span>
+                                <input type="radio" name="jobsPerMonth" value="16-30">
+                                <span class="radio-label">16–30 jobs/month — ready to scale</span>
                             </label>
                             <label class="radio-card">
-                                <input type="radio" name="situation" value="just-starting">
-                                <span class="radio-label">We are just starting / growing</span>
-                            </label>
-                            <label class="radio-card">
-                                <input type="radio" name="situation" value="exploring">
-                                <span class="radio-label">Just exploring options</span>
+                                <input type="radio" name="jobsPerMonth" value="30-plus">
+                                <span class="radio-label">30+ jobs/month — running at full capacity</span>
                             </label>
                         </div>
                         <div class="form-buttons">
@@ -135,6 +197,7 @@
                     <!-- Step 3: Experience -->
                     <div class="form-step" id="step3">
                         <h2 class="step-title">How long have you been in the spray foam business?</h2>
+                        <p class="step-subtitle">We work best with established crews who are ready to grow.</p>
                         <div class="radio-group">
                             <label class="radio-card">
                                 <input type="radio" name="experience" value="less-than-1-year">
@@ -159,34 +222,38 @@
                         </div>
                     </div>
 
-                   <!-- Results Step -->
-<div class="form-step" id="stepBooking">
-    <div class="booking-result">
-        <div class="booking-result-badge">✅ You Qualify</div>
-        <h2 class="booking-result-title">Here's What Happens Next.</h2>
-        <p class="booking-result-sub">On this free call, we'll build a custom lead plan for your spray foam business and show you exactly how to get a consistent flow of job requests in your area.</p>
-        <div class="booking-bullets">
-            <div class="booking-bullet-item">📞 We'll map out your local market and identify where the jobs are hiding</div>
-            <div class="booking-bullet-item">📲 See exactly how homeowners and contractors will find and contact you</div>
-            <div class="booking-bullet-item">🎯 Get a clear gameplan to fill your schedule without chasing referrals</div>
-        </div>
+                    <!-- Results Step -->
+                    <div class="form-step" id="stepBooking">
+                        <div class="booking-result">
+                            <div class="booking-result-badge">✅ Your Area Is Available</div>
+                            <h2 class="booking-result-title">Here's Exactly What We'll Do For You.</h2>
+                            <p class="booking-result-sub">On this free 30-minute call, we'll build a custom lead plan for your crew and show you what a full pipeline looks like in your specific service area.</p>
 
-        <!-- ← ADD THE PROOF IMAGE HERE ← -->
-        <!-- PROOF IMAGE SECTION (NEW) -->
-        <div class="proof-image-section">
-            <div class="proof-image-header">Real Results From Contractors We've Worked With</div>
-            <div class="proof-image-container">
-                <img src="proof-metrics.jpg" alt="69 leads, $9.11 cost per lead, $628.54 amount spent" loading="lazy">
-            </div>
-        </div>
+                            <div style="margin: 20px 0;">
+                                <div class="result-value-box">
+                                    <div class="result-value-box-title">📍 We'll map your exact service area</div>
+                                    <div class="result-value-box-desc">We identify where homeowners and GCs in your zip codes are actively searching for spray foam — so every ad dollar hits the right person.</div>
+                                </div>
+                                <div class="result-value-box">
+                                    <div class="result-value-box-title">📲 We'll show you the exact ad strategy</div>
+                                    <div class="result-value-box-desc">You'll see the same Meta ad setup we used to generate 69 leads at $9.11 each — and how we'd run it specifically for your crew.</div>
+                                </div>
+                                <div class="result-value-box">
+                                    <div class="result-value-box-title">📞 You'll leave with a clear gameplan</div>
+                                    <div class="result-value-box-desc">No vague advice. You'll know exactly what it takes to fill your schedule with inbound job requests — whether you move forward with us or not.</div>
+                                </div>
+                            </div>
 
-        <button type="button" class="btn btn-booking-gold btn-block" onclick="window.location.href='booking.html?utm_campaign=blueprint'">
-            Book My Free Strategy Call →
-        </button>
-        <p class="booking-trust-line">No sales pressure · 30-min Zoom call · Texas contractors only</p>
-    </div>
-</div>
+                            <div class="result-urgency">
+                                ⚠️ We only take 1 contractor per area. If your market shows available, book now before it's claimed.
+                            </div>
 
+                            <button type="button" class="btn btn-booking-gold btn-block" onclick="window.location.href='booking.html?utm_campaign=blueprint'">
+                                Book My Free Strategy Call →
+                            </button>
+                            <p class="booking-trust-line">No sales pressure · 30-min Zoom · Texas contractors only</p>
+                        </div>
+                    </div>
 
                 </form>
             </div>
