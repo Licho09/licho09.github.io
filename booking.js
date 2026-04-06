@@ -300,7 +300,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ── RESIZE ────────────────────────────────────────────────
-    window.addEventListener('resize', checkMobile);
+    // Only trigger on width changes — ignores mobile address bar show/hide
+    var lastWidth = window.innerWidth;
+    window.addEventListener('resize', function () {
+        var newWidth = window.innerWidth;
+        if (newWidth !== lastWidth) {
+            lastWidth = newWidth;
+            checkMobile();
+        }
+    });
 
     // ── INIT ──────────────────────────────────────────────────
     fetchBookedSlots().finally(function () { checkMobile(); });
