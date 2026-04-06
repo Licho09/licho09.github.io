@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var confirmBtn         = document.getElementById('confirmBtn');
     var nameInput          = document.getElementById('userName');
     var phoneInput         = document.getElementById('userPhone');
-    var smsOptInChk        = document.getElementById('smsOptIn');
 
     // Mobile elements
     var mobileStickyFooter = document.getElementById('mobileBookingStickyFooter');
@@ -86,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         updateMobileButtons();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // No auto-scroll
     }
 
     function updateMobileButtons() {
@@ -264,7 +263,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             var name  = nameInput  ? nameInput.value.trim()  : '';
             var phone = phoneInput ? phoneInput.value.trim() : '';
-            var optIn = smsOptInChk ? smsOptInChk.checked : false;
 
             if (!name || !phone) { alert('Please enter your name and phone number.'); return; }
             if (!selectedDate || !selectedTime) { alert('Please select a date and time.'); return; }
@@ -277,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var payload = {
                 type: 'booking', name: name, phone: phone,
                 dateTime: dateTimeText, situation: prefillSit,
-                experience: prefillExp, smsOptIn: optIn ? 'Yes' : 'No', status: 'Booked'
+                experience: prefillExp, status: 'Booked'
             };
 
             if (typeof gtag !== 'undefined') gtag('event', 'booking_confirmed', { event_category: 'Booking' });
