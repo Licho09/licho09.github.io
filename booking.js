@@ -185,6 +185,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function generateTimeSlots() {
         if (!timeGrid) return;
         timeGrid.innerHTML = '';
+        selectedTime = null;
+        updateDisplay();
         var times = ['9:00 AM','10:00 AM','11:00 AM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM'];
         times.forEach(function (time) {
             var btn = document.createElement('div');
