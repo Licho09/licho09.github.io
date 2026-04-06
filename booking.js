@@ -250,6 +250,13 @@ document.addEventListener('DOMContentLoaded', function () {
     if (nameInput)  nameInput.addEventListener('input', validateForm);
     if (phoneInput) phoneInput.addEventListener('input', validateForm);
 
+    var backToTimeBtn = document.getElementById('backToTimeBtn');
+    if (backToTimeBtn) {
+        backToTimeBtn.addEventListener('click', function () {
+            setMobileStep('time');
+        });
+    }
+
     // ── FETCH BOOKED SLOTS ────────────────────────────────────
     function fetchBookedSlots() {
         return fetch(GOOGLE_SHEET_URL + '?action=getBookings')
