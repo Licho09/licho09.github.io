@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking Confirmed - Foam Flow Leads</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <!-- Google Analytics -->
@@ -38,63 +40,250 @@
     </noscript>
     <!-- End Meta Pixel Code -->
 
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f5f4f0;
+            color: #1a1a18;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Header ── */
+        .site-header {
+            background: #fff;
+            border-bottom: 1px solid #e8e6e0;
+            padding: 0 1.5rem;
+            height: 56px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1a1a18;
+        }
+
+        .logo-fire {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .logo-accent {
+            color: #D85A30;
+        }
+
+        .logo-divider {
+            width: 1px;
+            height: 14px;
+            background: #ccc;
+            margin: 0 4px;
+        }
+
+        .logo-sub {
+            font-weight: 400;
+            color: #888;
+        }
+
+        /* ── Main ── */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 1rem;
+        }
+
+        /* ── Card ── */
+        .confirm-card {
+            background: #fff;
+            border: 1px solid #e8e6e0;
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 460px;
+            text-align: center;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Check icon ── */
+        .check-ring {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #EAF3DE;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+        }
+
+        /* ── Headings ── */
+        .confirm-title {
+            font-size: 22px;
+            font-weight: 500;
+            color: #1a1a18;
+            margin-bottom: 0.4rem;
+        }
+
+        .confirm-subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 1.75rem;
+        }
+
+        /* ── Details block ── */
+        .details-block {
+            background: #f5f4f0;
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            gap: 1rem;
+        }
+
+        .detail-label {
+            color: #888;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            color: #1a1a18;
+            text-align: right;
+        }
+
+        /* ── Note ── */
+        .confirm-note {
+            font-size: 13px;
+            color: #999;
+            margin-top: 1.25rem;
+            line-height: 1.6;
+        }
+
+        /* ── Button ── */
+        .btn-home {
+            display: block;
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.25rem;
+            background: #D85A30;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            text-decoration: none;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.15s ease, transform 0.1s ease;
+        }
+
+        .btn-home:hover {
+            background: #c04e27;
+        }
+
+        .btn-home:active {
+            transform: scale(0.98);
+        }
+
+        /* ── Footer ── */
+        .site-footer {
+            padding: 1.25rem;
+            text-align: center;
+            font-size: 12px;
+            color: #aaa;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="app-container">
 
-        <header class="simple-header">
-            <div class="logo-text">
-                <a href="index.html" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:0.3rem;">
-                    <span class="logo-icon">🔥</span>
-                    <span class="logo-word">Foam</span>
-                    <span class="logo-accent">Flow</span>
-                    <span class="logo-divider"></span>
-                    <span class="logo-sub">Leads</span>
-                </a>
+    <header class="site-header">
+        <a href="index.html" class="logo">
+            <span class="logo-fire">🔥</span>
+            <span>Foam <span class="logo-accent">Flow</span></span>
+            <span class="logo-divider"></span>
+            <span class="logo-sub">Leads</span>
+        </a>
+    </header>
+
+    <main>
+        <div class="confirm-card">
+
+            <div class="check-ring">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+                    stroke="#3B6D11" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
             </div>
-        </header>
 
-        <main class="question-container">
-            <div class="form-wrapper" style="text-align: center;">
-                <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--accent-bg); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)"
-                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
+            <h1 class="confirm-title">You're all booked!</h1>
+            <p class="confirm-subtitle">Your free strategy call has been confirmed.</p>
+
+            <div class="details-block">
+                <div class="detail-row">
+                    <span class="detail-label">Name</span>
+                    <span class="detail-value" id="confName">---</span>
                 </div>
-                <h1 class="step-title">You're Booked! 🎉</h1>
-                <p class="step-subtitle">Your free strategy call has been confirmed.</p>
-
-                <div class="selected-info" style="text-align: left; margin-top: 2rem;">
-                    <p><strong>Name:</strong> <span id="confName">---</span></p>
-                    <p><strong>Phone:</strong> <span id="confPhone">---</span></p>
-                    <p><strong>Appointment:</strong> <span id="confDateTime">---</span></p>
+                <div class="detail-row">
+                    <span class="detail-label">Phone</span>
+                    <span class="detail-value" id="confPhone">---</span>
                 </div>
-
-                <p style="margin-top: 2rem; color: var(--text-muted);">We'll reach out shortly to confirm and prepare for your call. Talk soon!</p>
-
-                <a href="index.html" class="btn btn-primary btn-block"
-                    style="margin-top: 2rem; text-decoration: none;">Return Home</a>
+                <div class="detail-row">
+                    <span class="detail-label">Appointment</span>
+                    <span class="detail-value" id="confDateTime">---</span>
+                </div>
             </div>
-        </main>
 
-        <footer class="simple-footer">
-            <p>&copy; 2026 Foam Flow Leads. All rights reserved.</p>
-        </footer>
-    </div>
+            <p class="confirm-note">We'll reach out shortly to confirm and prepare for your call. Talk soon!</p>
+
+            <a href="index.html" class="btn-home">Return home</a>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Foam Flow Leads. All rights reserved.</p>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Read booking details from URL params (passed by booking.js)
             const params = new URLSearchParams(window.location.search);
-            const name = params.get('name') || localStorage.getItem('lastBookingName') || '---';
-            const phone = params.get('phone') || localStorage.getItem('lastBookingPhone') || '---';
+            const name     = params.get('name')     || localStorage.getItem('lastBookingName')     || '---';
+            const phone    = params.get('phone')    || localStorage.getItem('lastBookingPhone')    || '---';
             const dateTime = params.get('dateTime') || localStorage.getItem('lastBookingDateTime') || '---';
 
-            document.getElementById('confName').textContent = name;
-            document.getElementById('confPhone').textContent = phone;
+            document.getElementById('confName').textContent     = name;
+            document.getElementById('confPhone').textContent    = phone;
             document.getElementById('confDateTime').textContent = dateTime;
 
             // Confetti
@@ -108,12 +297,12 @@
             }
 
             fire(0.25, { spread: 26, startVelocity: 55 });
-            fire(0.2, { spread: 60 });
+            fire(0.2,  { spread: 60 });
             fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-            fire(0.1, { spread: 120, startVelocity: 45 });
+            fire(0.1,  { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1,  { spread: 120, startVelocity: 45 });
         });
     </script>
-</body>
 
+</body>
 </html>
