@@ -320,7 +320,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ── INIT ──────────────────────────────────────────────────
-    fetchBookedSlots().finally(function () { checkMobile(); });
+    checkMobile(); // apply mobile classes immediately — prevents form flashing on load
+    fetchBookedSlots();
     updateDisplay();
     if (typeof gtag !== 'undefined') gtag('event', 'booking_page_view', { event_category: 'Booking' });
 });
