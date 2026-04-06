@@ -4,121 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Your Call - Foam Flow Leads</title>
-    <link rel="stylesheet" href="styles.css">
-
-    <style>
-        /* ── MOBILE BOOKING FLOW ── */
-        .mobile-booking-sticky {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            padding: 14px 16px;
-            padding-bottom: max(14px, calc(14px + env(safe-area-inset-bottom, 0px)));
-            box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
-            border-top: 1.5px solid var(--border);
-            z-index: 200;
-            gap: 10px;
-            align-items: center;
-        }
-
-        @media (max-width: 768px) {
-            .mobile-booking-sticky { display: flex; }
-
-            /* Default: show calendar, hide time + form */
-            body.mobile-booking-flow .booking-form-side { display: none !important; }
-            body.mobile-booking-flow .time-slots-container { display: none !important; }
-            body.mobile-booking-flow .booking-calendar-side { display: block !important; }
-
-            /* Time step — hide calendar, show only time slots */
-            body.mobile-booking-step-time .calendar-widget { display: none !important; }
-            body.mobile-booking-step-time .calendar-header { display: none !important; }
-            body.mobile-booking-step-time .calendar-section-title { display: none !important; }
-            body.mobile-booking-step-time .time-slots-container { display: block !important; }
-
-            /* Form step — show form, hide calendar, show confirm button inside form */
-            body.mobile-booking-step-form .booking-calendar-side { display: none !important; }
-            body.mobile-booking-step-form .booking-form-side { display: block !important; }
-            body.mobile-booking-step-form .mobile-booking-sticky { display: none !important; }
-            body.mobile-booking-step-form .booking-form-side .btn-booking-gold { display: block !important; }
-
-            .booking-container { padding-bottom: 100px; }
-        }
-
-        /* Mobile step indicator */
-        .mobile-step-indicator {
-            display: none;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 0 4px;
-        }
-
-        @media (max-width: 768px) {
-            .mobile-step-indicator { display: flex; }
-        }
-
-        .mobile-step-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--border);
-            transition: all 0.3s;
-        }
-
-        .mobile-step-dot.active {
-            background: var(--text);
-            width: 20px;
-            border-radius: 4px;
-        }
-
-        .mobile-step-dot.done {
-            background: #22c55e;
-        }
-
-        .mobile-step-label {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-muted);
-            margin-left: 4px;
-        }
-
-        #mobileBackBtn {
-            background: white;
-            border: 1.5px solid var(--border);
-            border-radius: 8px;
-            padding: 12px 16px;
-            font-weight: 700;
-            font-size: 14px;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            flex-shrink: 0;
-        }
-
-        #mobileContinueBtn {
-            flex: 1;
-            background: var(--highlight);
-            border: 2px solid var(--text);
-            border-radius: 8px;
-            padding: 14px;
-            font-weight: 800;
-            font-size: 15px;
-            color: var(--text);
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            box-shadow: 3px 3px 0 var(--text);
-            transition: all 0.15s;
-        }
-
-        #mobileContinueBtn:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 4px 4px 0 var(--text);
-        }
-    </style>
+    <title>Booking Confirmed - Foam Flow Leads</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JKLEK6QQDY"></script>
@@ -127,123 +17,292 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-JKLEK6QQDY');
+        gtag('event', 'call_booked', { event_category: 'Conversion', event_label: 'Strategy Call Booked' });
     </script>
 
-    <!-- Meta Pixel -->
+    <!-- Meta Pixel Code - Foam Flow Leads (1525517045371976) -->
     <script>
-        !function (f, b, e, v, n, t, s) {
-            if (f.fbq) return; n = f.fbq = function () {
-                n.callMethod ?
-                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-            };
-            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-            n.queue = []; t = b.createElement(e); t.async = !0;
-            t.src = v; s = b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t, s)
-        }(window, document, 'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '1525517045371976');
-        fbq('track', 'PageView');
-        fbq('track', 'Lead');
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1525517045371976');
+    fbq('track', 'PageView');
+    fbq('track', 'Schedule');
     </script>
     <noscript>
         <img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=1525517045371976&ev=PageView&noscript=1" />
     </noscript>
+    <!-- End Meta Pixel Code -->
+
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f5f4f0;
+            color: #1a1a18;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Header ── */
+        .site-header {
+            background: #fff;
+            border-bottom: 1px solid #e8e6e0;
+            padding: 0 1.5rem;
+            height: 56px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1a1a18;
+        }
+
+        .logo-fire {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .logo-accent {
+            color: #D85A30;
+        }
+
+        .logo-divider {
+            width: 1px;
+            height: 14px;
+            background: #ccc;
+            margin: 0 4px;
+        }
+
+        .logo-sub {
+            font-weight: 400;
+            color: #888;
+        }
+
+        /* ── Main ── */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 1rem;
+        }
+
+        /* ── Card ── */
+        .confirm-card {
+            background: #fff;
+            border: 1px solid #e8e6e0;
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 460px;
+            text-align: center;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Check icon ── */
+        .check-ring {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #EAF3DE;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+        }
+
+        /* ── Headings ── */
+        .confirm-title {
+            font-size: 22px;
+            font-weight: 500;
+            color: #1a1a18;
+            margin-bottom: 0.4rem;
+        }
+
+        .confirm-subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 1.75rem;
+        }
+
+        /* ── Details block ── */
+        .details-block {
+            background: #f5f4f0;
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            gap: 1rem;
+        }
+
+        .detail-label {
+            color: #888;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            color: #1a1a18;
+            text-align: right;
+        }
+
+        /* ── Note ── */
+        .confirm-note {
+            font-size: 13px;
+            color: #999;
+            margin-top: 1.25rem;
+            line-height: 1.6;
+        }
+
+        /* ── Button ── */
+        .btn-home {
+            display: block;
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.25rem;
+            background: #D85A30;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            text-decoration: none;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.15s ease, transform 0.1s ease;
+        }
+
+        .btn-home:hover {
+            background: #c04e27;
+        }
+
+        .btn-home:active {
+            transform: scale(0.98);
+        }
+
+        /* ── Footer ── */
+        .site-footer {
+            padding: 1.25rem;
+            text-align: center;
+            font-size: 12px;
+            color: #aaa;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="app-container">
 
-        <header class="simple-header">
-            <div class="logo-text">
-                <a href="index.html" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;gap:0.3rem;">
-                    <span class="logo-icon">🔥</span>
-                    <span class="logo-word">Foam</span>
-                    <span class="logo-accent">Flow</span>
-                    <span class="logo-divider"></span>
-                    <span class="logo-sub">Leads</span>
-                </a>
+    <header class="site-header">
+        <a href="index.html" class="logo">
+            <span class="logo-fire">🔥</span>
+            <span>Foam <span class="logo-accent">Flow</span></span>
+            <span class="logo-divider"></span>
+            <span class="logo-sub">Leads</span>
+        </a>
+    </header>
+
+    <main>
+        <div class="confirm-card">
+
+            <div class="check-ring">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+                    stroke="#3B6D11" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
             </div>
-        </header>
 
-        <section class="hero-text">
-            <h1 class="hero-headline">Book Your Free<br>Strategy Call</h1>
-            <p class="hero-subtext">A short 30-min Zoom call to map out how we get you consistent spray foam jobs.</p>
-        </section>
+            <h1 class="confirm-title">You're all booked!</h1>
+            <p class="confirm-subtitle">Your free strategy call has been confirmed.</p>
 
-        <!-- Mobile step dots -->
-        <div class="mobile-step-indicator" id="mobileStepIndicator">
-            <div class="mobile-step-dot active" id="dot1"></div>
-            <div class="mobile-step-dot" id="dot2"></div>
-            <div class="mobile-step-dot" id="dot3"></div>
-            <span class="mobile-step-label" id="mobileStepLabel">Select a Date</span>
-        </div>
-
-        <main class="booking-container">
-            <div class="booking-split-wrapper">
-
-                <!-- Left: Form -->
-                <div class="booking-form-side">
-                    <h2 class="step-title">Your Details</h2>
-                    <p class="step-subtitle">Confirm your info to lock in your spot. No contracts, no pressure &mdash; just a free 30-min call.</p>
-                    <form id="bookingForm">
-                        <div class="form-group">
-                            <label for="userName" class="field-label">Full Name</label>
-                            <input type="text" id="userName" name="userName" placeholder="Your Name" required class="text-input">
-                        </div>
-                        <div class="form-group">
-                            <label for="userPhone" class="field-label">Phone Number</label>
-                            <input type="tel" id="userPhone" name="userPhone" placeholder="(555) 000-0000" required class="text-input">
-                        </div>
-
-                        <div class="selected-info" id="selectedInfo">
-                            <p><strong>Selected:</strong> <span id="displayDateTime">Please select a date and time</span></p>
-                        </div>
-
-                        <button type="submit" id="confirmBtn" class="btn btn-booking-gold btn-block btn-disabled" disabled>
-                            Confirm My Free Call →
-                        </button>
-                        <p class="booking-trust-line">No sales pressure &middot; 30-min Zoom &middot; Texas contractors only</p>
-                        <button type="button" id="backToTimeBtn" class="back-link" style="background:none;border:none;cursor:pointer;width:100%;">← Back</button>
-                    </form>
+            <div class="details-block">
+                <div class="detail-row">
+                    <span class="detail-label">Name</span>
+                    <span class="detail-value" id="confName">---</span>
                 </div>
-
-                <!-- Right: Calendar -->
-                <div class="booking-calendar-side">
-                    <div class="calendar-section-title">Pick a Date</div>
-                    <div class="calendar-header">
-                        <h2 id="currentMonthYear"></h2>
-                    </div>
-                    <div class="calendar-widget">
-                        <div class="calendar-days-header">
-                            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-                        </div>
-                        <div class="calendar-grid" id="calendarGrid"></div>
-                    </div>
-                    <div class="time-slots-container" id="timeSlotsContainer">
-                        <h3 class="field-label">Available Times</h3>
-                        <div class="time-grid" id="timeGrid">
-                            <p class="empty-msg">Select a date to see times</p>
-                        </div>
-                    </div>
+                <div class="detail-row">
+                    <span class="detail-label">Phone</span>
+                    <span class="detail-value" id="confPhone">---</span>
                 </div>
-
+                <div class="detail-row">
+                    <span class="detail-label">Appointment</span>
+                    <span class="detail-value" id="confDateTime">---</span>
+                </div>
             </div>
-        </main>
 
-        <!-- Mobile Sticky Footer -->
-        <div class="mobile-booking-sticky" id="mobileBookingStickyFooter">
-            <button id="mobileBackBtn" style="display:none;">← Back</button>
-            <button id="mobileContinueBtn">Next: Pick a Time →</button>
+            <p class="confirm-note">We'll reach out shortly to confirm and prepare for your call. Talk soon!</p>
+
+            <a href="index.html" class="btn-home">Return home</a>
+
         </div>
+    </main>
 
-        <footer class="simple-footer">
-            <p>&copy; 2026 Foam Flow Leads. All rights reserved.</p>
-        </footer>
-    </div>
+    <footer class="site-footer">
+        <p>&copy; 2026 Foam Flow Leads. All rights reserved.</p>
+    </footer>
 
-    <script src="booking.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const params = new URLSearchParams(window.location.search);
+            const name     = params.get('name')     || localStorage.getItem('lastBookingName')     || '---';
+            const phone    = params.get('phone')    || localStorage.getItem('lastBookingPhone')    || '---';
+            const dateTime = params.get('dateTime') || localStorage.getItem('lastBookingDateTime') || '---';
+
+            document.getElementById('confName').textContent     = name;
+            document.getElementById('confPhone').textContent    = phone;
+            document.getElementById('confDateTime').textContent = dateTime;
+
+            // Confetti
+            var count = 200;
+            var defaults = { origin: { y: 0.7 } };
+
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio)
+                }));
+            }
+
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2,  { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1,  { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1,  { spread: 120, startVelocity: 45 });
+        });
+    </script>
+
 </body>
-
 </html>
