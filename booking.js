@@ -1,5 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    // ── TOKEN PROTECTION ──────────────────────────────────────
+    var params = new URLSearchParams(window.location.search);
+    var token  = params.get('token');
+    if (token !== 'foamflow2026') {
+        window.location.href = 'index.html';
+        return;
+    }
+
     // ── CONFIG ────────────────────────────────────────────────
     var GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyQn65Ow5YEMMY4kNN2PNK5FzdysBV3igm5a69EAN-QeZgBgFJz2khkIhkrl3ljDYX6/exec';
 
@@ -31,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var mobileStep   = 'calendar';
 
     // ── URL PARAMS → PREFILL ──────────────────────────────────
-    var params      = new URLSearchParams(window.location.search);
     var prefillName = params.get('name')      || localStorage.getItem('leadName')  || '';
     var prefillPhone= params.get('phone')     || localStorage.getItem('leadPhone') || '';
     var prefillSit  = params.get('situation') || '';
@@ -85,7 +92,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         updateMobileButtons();
-        // No auto-scroll
     }
 
     function updateMobileButtons() {
@@ -309,7 +315,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ── RESIZE ────────────────────────────────────────────────
-    // Only trigger on width changes — ignores mobile address bar show/hide
     var lastWidth = window.innerWidth;
     window.addEventListener('resize', function () {
         var newWidth = window.innerWidth;
@@ -320,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ── INIT ──────────────────────────────────────────────────
-    checkMobile(); // apply mobile classes immediately — prevents form flashing on load
+    checkMobile();
     fetchBookedSlots();
     updateDisplay();
     if (typeof gtag !== 'undefined') gtag('event', 'booking_page_view', { event_category: 'Booking' });
