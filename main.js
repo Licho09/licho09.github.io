@@ -8,7 +8,7 @@ function launchConfetti() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  const colors = ['#0062fe', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
+  const colors = ['#f5d800', '#111111', '#22c55e', '#f59e0b', '#ef4444', '#06b6d4'];
   const pieces = [];
 
   for (let i = 0; i < 160; i++) {
@@ -76,16 +76,15 @@ function saveProgress(stepStatus) {
     if (name) localStorage.setItem('leadName', name);
     if (phone) localStorage.setItem('leadPhone', phone);
 
-    // Step 2 is now jobsPerMonth
     const jobsPerMonth = document.querySelector('input[name="jobsPerMonth"]:checked')?.value || '';
-    const experience = document.querySelector('input[name="experience"]:checked')?.value || '';
+    const jobType = document.querySelector('input[name="jobType"]:checked')?.value || '';
 
     const payload = {
         type: stepStatus === 'Complete' ? 'survey' : 'partial',
         name: name,
         phone: phone,
         jobsPerMonth: jobsPerMonth,
-        experience: experience,
+        jobType: jobType,
         status: stepStatus
     };
 
@@ -162,11 +161,10 @@ function checkStepReady(stepNum) {
       return !!(name && phone);
   }
   if (stepNum === 2) {
-      // Updated: now checking jobsPerMonth
       return !!document.querySelector('input[name="jobsPerMonth"]:checked');
   }
   if (stepNum === 3) {
-      return !!document.querySelector('input[name="experience"]:checked');
+      return !!document.querySelector('input[name="jobType"]:checked');
   }
   return false;
 }
@@ -211,7 +209,7 @@ function showStep(n) {
   if (typeof gtag !== 'undefined') {
       if (n === 1) gtag('event', 'quiz_step_1', { event_category: 'Quiz', event_label: 'Contact Info' });
       if (n === 2) gtag('event', 'quiz_step_2', { event_category: 'Quiz', event_label: 'Jobs Per Month' });
-      if (n === 3) gtag('event', 'quiz_step_3', { event_category: 'Quiz', event_label: 'Experience' });
+      if (n === 3) gtag('event', 'quiz_step_3', { event_category: 'Quiz', event_label: 'Job Type' });
       if (n === 'booking') gtag('event', 'quiz_complete', { event_category: 'Quiz', event_label: 'Qualified' });
   }
 }
@@ -243,21 +241,19 @@ function goBack(from) {
 
 function showBooking() {
     const jobsPerMonth = document.querySelector('input[name="jobsPerMonth"]:checked');
-    const experience = document.querySelector('input[name="experience"]:checked');
+    const jobType = document.querySelector('input[name="jobType"]:checked');
 
-    if (!jobsPerMonth || !experience) {
+    if (!jobsPerMonth || !jobType) {
         alert('Please select an option to continue.');
         return;
     }
 
     saveProgress('Complete');
-
     showStep('booking');
     launchConfetti();
 
     if (typeof fbq !== 'undefined') fbq('track', 'Lead');
 
-    // Wire up booking button with lead data in URL params
     const bookingBtn = document.querySelector('#stepBooking .btn-booking-gold');
     if (bookingBtn) {
         const name = localStorage.getItem('leadName');
@@ -266,7 +262,7 @@ function showBooking() {
             name: name,
             phone: phone,
             jobsPerMonth: jobsPerMonth.value,
-            experience: experience.value
+            jobType: jobType.value
         });
         bookingBtn.onclick = () => { window.location.href = `booking.html?${params.toString()}`; };
     }
@@ -282,18 +278,15 @@ document.addEventListener('input', function (e) {
 });
 
 document.addEventListener('change', function (e) {
-  // Updated: jobsPerMonth replaces situation
   if (e.target.name === 'jobsPerMonth') {
       setNextButtonState(2, true);
       updateMobileFooter();
   }
-  if (e.target.name === 'experience') {
+  if (e.target.name === 'jobType') {
       setNextButtonState(3, true);
       updateMobileFooter();
   }
 });
-
-// Wire up step 2 and 3 buttons — handled in INIT below
 
 // =====================
 // MOBILE STICKY FOOTER
