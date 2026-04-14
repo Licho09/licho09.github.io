@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="styles.css">
 
     <style>
-        /* ── MOBILE BOOKING FLOW ── */
         .mobile-booking-sticky {
             display: none;
             position: fixed;
@@ -27,28 +26,20 @@
 
         @media (max-width: 768px) {
             .mobile-booking-sticky { display: flex; }
-
-            /* Default: show calendar, hide time + form */
             body.mobile-booking-flow .booking-form-side { display: none !important; }
             body.mobile-booking-flow .time-slots-container { display: none !important; }
             body.mobile-booking-flow .booking-calendar-side { display: block !important; }
-
-            /* Time step — hide calendar, show only time slots */
             body.mobile-booking-step-time .calendar-widget { display: none !important; }
             body.mobile-booking-step-time .calendar-header { display: none !important; }
             body.mobile-booking-step-time .calendar-section-title { display: none !important; }
             body.mobile-booking-step-time .time-slots-container { display: block !important; }
-
-            /* Form step — show form, hide calendar, show confirm button inside form */
             body.mobile-booking-step-form .booking-calendar-side { display: none !important; }
             body.mobile-booking-step-form .booking-form-side { display: block !important; }
             body.mobile-booking-step-form .mobile-booking-sticky { display: none !important; }
             body.mobile-booking-step-form .booking-form-side .btn-booking-gold { display: block !important; }
-
             .booking-container { padding-bottom: 100px; }
         }
 
-        /* Mobile step indicator */
         .mobile-step-indicator {
             display: none;
             justify-content: center;
@@ -204,7 +195,7 @@
                         <button type="submit" id="confirmBtn" class="btn btn-booking-gold btn-block btn-disabled" disabled>
                             Confirm My Free Call →
                         </button>
-                        <p class="booking-trust-line">No sales pressure &middot; 30-min Zoom &middot; Texas contractors only</p>
+                        <p class="booking-trust-line">No sales pressure &middot; 30-min Zoom &middot; Houston contractors only</p>
                         <button type="button" id="backToTimeBtn" class="back-link" style="background:none;border:none;cursor:pointer;width:100%;">← Back</button>
                     </form>
                 </div>
@@ -244,6 +235,16 @@
     </div>
 
     <script src="booking.js"></script>
+    <script>
+        // Pre-fill name and phone from URL params (SMS link or quiz redirect)
+        document.addEventListener('DOMContentLoaded', function () {
+            const params = new URLSearchParams(window.location.search);
+            const name  = params.get('name');
+            const phone = params.get('phone');
+            if (name)  document.getElementById('userName').value  = decodeURIComponent(name);
+            if (phone) document.getElementById('userPhone').value = decodeURIComponent(phone);
+        });
+    </script>
 </body>
 
 </html>
