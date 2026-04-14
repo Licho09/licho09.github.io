@@ -38,14 +38,12 @@
         src="https://www.facebook.com/tr?id=1525517045371976&ev=PageView&noscript=1"/></noscript>
 
     <style>
-        /* ── PROOF IMAGE (hero section) ── */
         .proof-image-wrap {
             max-width: 480px;
             margin: 0 auto 28px;
             padding: 0 24px;
             text-align: center;
         }
-
         .proof-image {
             width: 100%;
             border-radius: 10px;
@@ -53,15 +51,12 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             display: block;
         }
-
         .proof-image-caption {
             font-size: 11px;
             color: #888;
             margin-top: 8px;
             font-weight: 500;
         }
-
-        /* ── RESULTS SCREEN OVERRIDES ── */
         .result-value-box {
             background: #fafafa;
             border: 1.5px solid #e8e8e8;
@@ -71,20 +66,17 @@
             margin-bottom: 10px;
             text-align: left;
         }
-
         .result-value-box-title {
             font-size: 14px;
             font-weight: 800;
             color: #111;
             margin-bottom: 4px;
         }
-
         .result-value-box-desc {
             font-size: 13px;
             color: #555;
             line-height: 1.5;
         }
-
         .result-urgency {
             font-size: 13px;
             font-weight: 700;
@@ -110,16 +102,15 @@
         <!-- HERO -->
         <section class="hero-text">
             <h1 class="hero-headline">
-                Stop Losing Jobs to Slow Weeks.<br>
-                <span class="headline-highlight">We Fill Your Schedule</span>
-                With Inbound Spray Foam Requests.
+                <span class="headline-highlight">15 Booked Residential Appointments</span>
+                in 45 Days — or You Don't Pay.
             </h1>
             <p class="hero-subtext">
-                We run targeted Meta ads for <strong>Texas spray foam contractors</strong> that bring homeowners and GCs directly to you — no cold calls, no referral chasing, no long-term contracts.
+                We run targeted Meta ads for <strong>Houston spray foam contractors</strong>, call every lead within 60 seconds, and book them straight to your calendar — no cold calls, no chasing, no long-term contracts.
             </p>
         </section>
 
-        <!-- PROOF IMAGE (above the fold, before form) -->
+        <!-- PROOF IMAGE -->
         <div class="proof-image-wrap">
             <img src="proof-metrics.jpg" alt="69 leads, $9.11 cost per lead, $628.54 spent" class="proof-image" loading="lazy">
             <p class="proof-image-caption">From a Texas spray foam contractor — results generated in 30 days</p>
@@ -128,16 +119,14 @@
         <!-- HERO CTA -->
         <div class="hero-cta-wrap">
             <button class="btn-hero-cta" onclick="document.getElementById('formSection').scrollIntoView({behavior:'smooth'})">
-                Check If You Qualify for Exclusive Leads →
+                See If You Qualify →
             </button>
-            <p class="hero-cta-sub">👇 Takes 60 seconds — Texas contractors only</p>
+            <p class="hero-cta-sub">👇 Takes 60 seconds — Houston contractors only</p>
         </div>
 
         <!-- FORM SECTION -->
         <section id="formSection" class="form-section">
-
             <div class="form-wrapper" id="formWrapper">
-
                 <div class="progress-container">
                     <div class="progress-bar-bg">
                         <div class="progress-bar" id="progressBar"></div>
@@ -152,22 +141,18 @@
                     <!-- Step 1: Contact Info -->
                     <div class="form-step active" id="step1">
                         <h2 class="step-title">Contact Info</h2>
-                    
-
                         <div class="form-group">
                             <label for="userName" class="field-label">Full Name</label>
                             <input type="text" id="userName" name="userName" placeholder="Your Name" required class="text-input">
                         </div>
-
                         <div class="form-group">
                             <label for="userPhone" class="field-label">Phone Number</label>
                             <input type="tel" id="userPhone" name="userPhone" placeholder="(555) 000-0000" required class="text-input">
                         </div>
-
                         <button type="button" class="btn btn-primary btn-block btn-disabled" disabled onclick="nextStep(1)">Next →</button>
                     </div>
 
-                    <!-- Step 2: Jobs per month (qualification question) -->
+                    <!-- Step 2: Jobs per month -->
                     <div class="form-step" id="step2">
                         <h2 class="step-title">How many jobs does your crew complete per month?</h2>
                         <p class="step-subtitle">This helps us build the right lead plan for your capacity.</p>
@@ -233,7 +218,7 @@
                             <div style="margin: 20px 0;">
                                 <div class="result-value-box">
                                     <div class="result-value-box-title">📍 We'll map your exact service area</div>
-                                    <div class="result-value-box-desc">We identify where homeowners and GCs in your zip codes are actively searching for spray foam — so every ad dollar hits the right person.</div>
+                                    <div class="result-value-box-desc">We identify where homeowners in your zip codes are actively searching for spray foam — so every ad dollar hits the right person.</div>
                                 </div>
                                 <div class="result-value-box">
                                     <div class="result-value-box-title">📲 We'll show you the exact ad strategy</div>
@@ -241,7 +226,7 @@
                                 </div>
                                 <div class="result-value-box">
                                     <div class="result-value-box-title">📞 You'll leave with a clear gameplan</div>
-                                    <div class="result-value-box-desc">No vague advice. You'll know exactly what it takes to fill your schedule with inbound job requests — whether you move forward with us or not.</div>
+                                    <div class="result-value-box-desc">No vague advice. You'll know exactly what it takes to fill your schedule with booked residential appointments — whether you move forward with us or not.</div>
                                 </div>
                             </div>
 
@@ -249,11 +234,10 @@
                                 ⚠️ We only take 1 contractor per area. If your market shows available, book now before it's claimed.
                             </div>
 
-                        <button type="button" class="btn btn-booking-gold btn-block" onclick="window.location.href='booking.html?utm_campaign=blueprint&name='+encodeURIComponent(document.getElementById('userName').value)+'&phone='+encodeURIComponent(document.getElementById('userPhone').value)">
-
+                            <button type="button" class="btn btn-booking-gold btn-block" onclick="window.location.href='booking.html?utm_campaign=blueprint&name='+encodeURIComponent(document.getElementById('userName').value)+'&phone='+encodeURIComponent(document.getElementById('userPhone').value)">
                                 Book My Free Strategy Call →
                             </button>
-                            <p class="booking-trust-line">No sales pressure · 30-min Zoom · Texas contractors only</p>
+                            <p class="booking-trust-line">No sales pressure · 30-min Zoom · Houston contractors only</p>
                         </div>
                     </div>
 
@@ -261,7 +245,6 @@
             </div>
         </section>
 
-        <!-- Confetti Canvas -->
         <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
 
         <!-- VALUE SECTION -->
@@ -271,23 +254,23 @@
                 <div class="value-cards">
                     <div class="value-card">
                         <span class="value-card-icon">📞</span>
-                        <div class="value-card-title">Inbound Calls, Not Cold Outreach</div>
-                        <p class="value-card-text">We run targeted ads that bring homeowners and GCs to you. No cold calling, no chasing leads — your phone rings with people who already want spray foam.</p>
+                        <div class="value-card-title">We Call Every Lead in 60 Seconds</div>
+                        <p class="value-card-text">The moment someone fills out your form, we call them instantly. Speed to lead is everything — first to call wins the job.</p>
                     </div>
                     <div class="value-card">
                         <span class="value-card-icon">📍</span>
-                        <div class="value-card-title">Hyper-Local Targeting</div>
-                        <p class="value-card-text">We target your exact service area in Texas so you're not wasting money on leads two hours away. Every dollar works harder in your backyard.</p>
+                        <div class="value-card-title">Hyper-Local Houston Targeting</div>
+                        <p class="value-card-text">We target your exact service area so you're not wasting money on leads two hours away. Every dollar works in your backyard.</p>
                     </div>
                     <div class="value-card">
-                        <span class="value-card-icon">🔄</span>
-                        <div class="value-card-title">Stop the Feast-or-Famine Cycle</div>
-                        <p class="value-card-text">Referrals dry up. Slow weeks kill cash flow. Our system keeps a steady pipeline of job requests coming in month after month.</p>
+                        <span class="value-card-icon">📅</span>
+                        <div class="value-card-title">Booked to Your Calendar — Not Just Leads</div>
+                        <p class="value-card-text">We don't just send you a name and number. We qualify the lead and book the appointment directly to your calendar.</p>
                     </div>
                     <div class="value-card">
-                        <span class="value-card-icon">📈</span>
-                        <div class="value-card-title">Built for Spray Foam Contractors</div>
-                        <p class="value-card-text">Generic marketing agencies don't understand spray foam. We do. Our messaging and strategy is built specifically for this trade in Texas.</p>
+                        <span class="value-card-icon">🔒</span>
+                        <div class="value-card-title">15 Appointments or You Don't Pay</div>
+                        <p class="value-card-text">We back everything with a guarantee. If we don't hit 15 booked residential appointments in 45 days, you owe us nothing.</p>
                     </div>
                 </div>
             </div>
